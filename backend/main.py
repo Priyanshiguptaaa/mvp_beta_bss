@@ -76,14 +76,21 @@ origins = [
 ]
 
 # Add CORS middleware with explicit configuration
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+#     allow_headers=["Content-Type", "Authorization", "Accept"],
+#     expose_headers=["Content-Length", "X-Total-Count"],
+#     max_age=3600,
+# )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allow_headers=["Content-Type", "Authorization", "Accept"],
-    expose_headers=["Content-Length", "X-Total-Count"],
-    max_age=3600,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 from starlette.middleware.sessions import SessionMiddleware

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,17 @@ export default function StartPage() {
   const handleSignup = () => {
     router.push("/create-team");
   };
+
+  useEffect(() => {
+    // Autofill from sessionStorage if available
+    if (typeof window !== "undefined") {
+      const pending = sessionStorage.getItem('pendingProject');
+      if (pending) {
+        const data = JSON.parse(pending);
+        // You can prefill any form fields you need here
+      }
+    }
+  }, []);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6a8dff] via-[#a084ee] to-[#e0c3fc]">

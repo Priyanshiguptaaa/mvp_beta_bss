@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { HexColorPicker } from 'react-colorful';
@@ -46,6 +46,22 @@ export function ProjectSetupForm() {
 
   const colorScheme = watch('colorScheme');
 
+  useEffect(() => {
+    // Autofill from sessionStorage if available
+    if (typeof window !== "undefined") {
+      const pending = sessionStorage.getItem('pendingProject');
+      if (pending) {
+        const data = JSON.parse(pending);
+        setValue('name', data.name);
+        setValue('description', data.description);
+        setValue('colorScheme', data.color_scheme);
+        setTeamEmails(data.members?.map((m: any) => m.email) || []);
+        setValue('teamEmails', data.members?.map((m: any) => m.email) || []);
+        // Optionally prefill seats if you store it
+      }
+    }
+  }, [setValue]);
+
   const onSubmit = async (data: ProjectFormData) => {
     // Prepare members array for API
     const members = teamEmails.map(email => ({ email, role: 'member' }));
@@ -68,6 +84,7 @@ export function ProjectSetupForm() {
       sessionStorage.setItem('projectData', JSON.stringify(project));
       setProjectData(project);
       setShowAuthChoice(true);
+      sessionStorage.removeItem('pendingProject'); // Clear after success
     } catch (error: any) {
       console.error('Error submitting form:', error);
       alert('An error occurred while creating the project.');

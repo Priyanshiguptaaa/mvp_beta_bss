@@ -15,9 +15,9 @@ from starlette.responses import RedirectResponse, JSONResponse
 from starlette.config import Config
 import os
 
-from api.database.database import get_db
-from api.models.database import User, AuditLog
-from api.models.user import UserCreate, UserLogin, UserResponse, Token, TokenData
+from ..database.database import get_db
+from ..models.database import User, AuditLog
+from ..models.user import UserCreate, UserLogin, UserResponse, Token, TokenData
 from config.settings import settings
 
 # Set up logging

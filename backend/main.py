@@ -1,8 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-from typing import List, Optional, Dict
 import os
 import logging
 from logging.handlers import RotatingFileHandler
@@ -10,13 +7,12 @@ from pydantic import BaseModel
 from datetime import datetime
 import uvicorn
 from starlette.middleware.sessions import SessionMiddleware
+from typing import List, Optional, Dict
 
-from api.database.database import get_db, engine, SessionLocal
-from api.models.database import Base as DatabaseBase, User as UserModel
-from api.models.schemas import User
+from api.database.database import engine
+from api.models.database import Base as DatabaseBase
 from api.routes import api_router
-from api.auth.router import router as auth_router, get_current_user, get_password_hash, create_access_token
-from config.settings import settings
+from api.auth.router import router as auth_router
 
 # Set up logging
 log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
@@ -76,24 +72,13 @@ origins = [
 ]
 
 # Add CORS middleware with explicit configuration
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-#     allow_headers=["Content-Type", "Authorization", "Accept"],
-#     expose_headers=["Content-Length", "X-Total-Count"],
-#     max_age=3600,
-# )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-from starlette.middleware.sessions import SessionMiddleware
 
 app.add_middleware(
     SessionMiddleware,

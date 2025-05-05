@@ -17,7 +17,7 @@ export default function CreateTeamPage() {
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f5f6fa] to-[#e6e9f5]">
       <section className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
         <h1 className="text-2xl font-bold mb-6 text-center">Create Your Team</h1>
-        <ProjectSetupForm onSuccess={handleTeamCreated} />
+        <ProjectSetupForm />
       </section>
     </main>
   );

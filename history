@@ -1,0 +1,82 @@
+chmod +x frontend/scripts/setup.sh
+chmod +x frontend/scripts/setup.sh
+cd frontend && ./scripts/setup.sh
+npm install && npm run dev
+rm -rf node_modules .next package-lock.json && npm install
+cd frontend && npm run dev
+cd frontend && rm -rf src/pages src/index.js src/App.js src/index.css
+rm -rf node_modules .next package-lock.json && npm install
+npm run dev
+npm install @hookform/resolvers @radix-ui/react-label
+cd frontend && npm run dev
+cd frontend && rm -rf node_modules .next package-lock.json && npm install
+npm run dev
+npm run dev
+cd frontend && npm run dev
+npm run dev
+cd frontend && npm run dev
+cd frontend && npm run dev
+cd frontend && npm install @radix-ui/react-checkbox lucide-react
+cd frontend && npm run dev
+npm run dev
+npm run dev
+cd frontend && npm run dev
+cd frontend && npm run dev
+cd frontend && npm run dev
+   pip install -r requirements.txt
+   pip install -r requirements.txt
+cd backend
+   pip install -r requirements.txt
+pip install python-multipart
+   pip install slack_sdk
+   pip install --upgrade pip\
+   pip install -r requirements.txt
+   python3 -m venv .venv
+   source .venv/bin/activate
+   source .venv/bin/activate
+cd backend\
+uvicorn main:app --reload
+   python3 -m venv .venv
+cd backend\
+uvicorn main:app --reload
+cd frontend && npm run dev
+cd frontend && npm run dev
+cd ..
+cd frontend && npm run dev
+npm run dev
+npm run dev
+npm run dev
+npm run dev
+npm run dev
+npm run dev
+npm run dev
+npm run dev
+alembic revision --autogenerate -m "add integrations column to projects"\
+alembic upgrade head
+alembic revision --autogenerate -m "add integrations column to projects"
+cd backend
+alembic init alembic
+alembic revision --autogenerate -m "add integrations column to projects"
+ alembic upgrade head
+alembic stamp head
+   alembic revision --autogenerate -m "add integrations column to projects"
+   alembic upgrade head
+   alembic revision --autogenerate -m "add integrations column to projects"\
+   alembic upgrade head
+alembic revision --autogenerate -m "add integrations column to projects"
+cd ../backend\
+alembic init alembic
+pip install alembic
+pip install alembic
+cd frontend && npm install @radix-ui/react-select
+npm install class-variance-authority
+npm install @radix-ui/react-switch
+pip install authlib python-jose
+ls ../backend | grep -i venv
+pip --version && python3 --version
+sqlite3 ../backend/echosys.db 'ALTER TABLE projects ADD COLUMN integrations JSON;'
+rm ../backend/echosys.db
+cd frontend && npm install sonner
+npm install sonner
+   alembic revision --autogenerate -m "add integrations column to projects"
+   pip install itsdangerous

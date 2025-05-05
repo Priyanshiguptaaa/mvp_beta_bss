@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+authlib
+python-jose
+passlib
+slowapi
+python-dotenv
+alembic
+email-validator
+httpx
+slack_sdk
+itsdangerous 

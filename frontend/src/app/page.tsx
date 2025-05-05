@@ -29,7 +29,7 @@ export default function StartPage() {
   };
 
   const handleSignup = () => {
-    router.push("/create-project");
+    router.push("/create-team");
   };
 
   return (

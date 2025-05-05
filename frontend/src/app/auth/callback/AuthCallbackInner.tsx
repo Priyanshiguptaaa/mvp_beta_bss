@@ -18,15 +18,15 @@ export default function AuthCallbackInner() {
         .then(project => {
           sessionStorage.setItem('projectData', JSON.stringify(project));
           sessionStorage.removeItem('pendingProject');
-          router.replace("/onboarding/tools");
+          router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding/tools`);
         })
         .catch(() => {
           alert('Project creation failed after authentication.');
           sessionStorage.removeItem('pendingProject');
-          router.replace("/onboarding");
+          router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`);
         });
     } else {
-      router.replace("/onboarding/tools");
+      router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding/tools`);
     }
   }, [router, searchParams]);
 

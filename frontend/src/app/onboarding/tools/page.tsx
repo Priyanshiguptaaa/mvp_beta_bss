@@ -102,7 +102,7 @@ export default function OnboardingToolsPage() {
         }
       }
       // Redirect to dashboard or next step
-      router.push('/dashboard');
+      router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
     }
   };
 

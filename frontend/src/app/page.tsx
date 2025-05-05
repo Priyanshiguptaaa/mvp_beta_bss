@@ -18,13 +18,19 @@ export default function StartPage() {
   const router = useRouter();
 
   const handleLogin = () => {
-    // Check for token (simulate GitHub OAuth for demo)
-    const token = localStorage.getItem("token");
+    // Check for token
+    const token = localStorage.getItem("authToken");
     if (token) {
       router.replace("/dashboard");
     } else {
-      // Start GitHub OAuth (replace with real URL in prod)
-      window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/github/login`;
+      // Start GitHub OAuth
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        console.error("API URL not configured");
+        alert("Authentication is not properly configured. Please contact support.");
+        return;
+      }
+      window.location.href = `${apiUrl}/auth/github/login`;
     }
   };
 

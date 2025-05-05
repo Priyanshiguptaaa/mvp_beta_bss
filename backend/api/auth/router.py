@@ -353,23 +353,34 @@ async def github_login(request: Request):
 @router.get("/github/callback")
 async def github_callback(request: Request, db: Session = Depends(get_db)):
     try:
+        logger.info("Received GitHub callback")
         token = await oauth.github.authorize_access_token(request)
+        logger.info("Successfully obtained access token")
+        
         resp = await oauth.github.get('user', token=token)
         user_data = resp.json()
+        logger.info(f"Retrieved user data: {user_data.get('login')}")
+        
         email = user_data.get('email')
         if not email:
-            # Fetch primary email if not public
+            logger.info("Email not in public profile, fetching from emails endpoint")
             emails_resp = await oauth.github.get('user/emails', token=token)
             emails = emails_resp.json()
             email = next((e['email'] for e in emails if e.get('primary')), None)
-        else:
-            email = user_data.get('email')
+            
         if not email:
-            return JSONResponse({"error": "Email not available from GitHub"}, status_code=400)
+            logger.error("No email found in GitHub profile")
+            return JSONResponse(
+                {"error": "Email not available from GitHub. Please make your email public or use a different authentication method."},
+                status_code=400
+            )
+            
+        logger.info(f"Processing user with email: {email}")
+        
         # Check if user exists
         user = db.query(User).filter(User.email == email).first()
         if not user:
-            # Create new user
+            logger.info(f"Creating new user for email: {email}")
             user = User(
                 email=email,
                 full_name=user_data.get('name') or user_data.get('login'),
@@ -379,16 +390,35 @@ async def github_callback(request: Request, db: Session = Depends(get_db)):
             db.add(user)
             db.commit()
             db.refresh(user)
+            logger.info(f"Created new user with ID: {user.id}")
+        else:
+            logger.info(f"Found existing user with ID: {user.id}")
+            
         # Issue JWT token
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user.email},
             expires_delta=access_token_expires
         )
-        # Redirect to frontend with token (or return as JSON for API clients)
-        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+        logger.info("Generated JWT token")
+        
+        # Get frontend URL from environment
+        frontend_url = os.getenv("FRONTEND_URL")
+        if not frontend_url:
+            logger.error("FRONTEND_URL not configured")
+            return JSONResponse(
+                {"error": "Server configuration error. Please contact support."},
+                status_code=500
+            )
+            
+        # Redirect to frontend with token
         redirect_url = f"{frontend_url}/auth/callback?token={access_token}"
+        logger.info(f"Redirecting to: {frontend_url}/auth/callback")
         return RedirectResponse(url=redirect_url)
+        
     except Exception as e:
-        logger.error(f"GitHub OAuth error: {str(e)}")
-        return JSONResponse({"error": str(e)}, status_code=400) 
+        logger.error(f"GitHub OAuth error: {str(e)}", exc_info=True)
+        return JSONResponse(
+            {"error": "Authentication failed. Please try again."},
+            status_code=400
+        ) 

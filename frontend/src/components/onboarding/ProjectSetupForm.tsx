@@ -71,20 +71,19 @@ export function ProjectSetupForm() {
       color_scheme: data.colorScheme,
       members,
     };
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    if (!token) {
-      // Not authenticated: store form data and redirect to GitHub auth
-      sessionStorage.setItem('pendingProject', JSON.stringify(payload));
-      window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/github/login`;
-      return;
-    }
+
     try {
-      // Authenticated: create project via API
+      // Create a demo token if not exists
+      if (!localStorage.getItem('authToken')) {
+        const demoToken = "demo_token_" + Date.now();
+        localStorage.setItem("authToken", demoToken);
+      }
+
+      // Create project via API
       const project = await api.createProject(payload);
       sessionStorage.setItem('projectData', JSON.stringify(project));
       setProjectData(project);
-      setShowAuthChoice(true);
-      sessionStorage.removeItem('pendingProject'); // Clear after success
+      router.push('/onboarding/tools');
     } catch (error: any) {
       console.error('Error submitting form:', error);
       alert('An error occurred while creating the project.');

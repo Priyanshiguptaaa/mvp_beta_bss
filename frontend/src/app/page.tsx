@@ -23,14 +23,10 @@ export default function StartPage() {
     if (token) {
       router.replace("/dashboard");
     } else {
-      // Start GitHub OAuth
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (!apiUrl) {
-        console.error("API URL not configured");
-        alert("Authentication is not properly configured. Please contact support.");
-        return;
-      }
-      window.location.href = `${apiUrl}/auth/github/login`;
+      // For demo purposes, create a simple token
+      const demoToken = "demo_token_" + Date.now();
+      localStorage.setItem("authToken", demoToken);
+      router.replace("/dashboard");
     }
   };
 

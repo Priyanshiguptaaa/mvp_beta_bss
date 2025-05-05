@@ -134,13 +134,36 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
+def is_demo_token(token: str) -> bool:
+    """Check if the token is a demo token."""
+    return token.startswith("demo_token_")
+
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
-    """Get current user from JWT token."""
+    """Get current user from JWT token or demo token."""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
+    # Handle demo token
+    if is_demo_token(token):
+        # Create or get a demo user
+        demo_email = f"demo_{token.split('_')[-1]}@example.com"
+        user = db.query(User).filter(User.email == demo_email).first()
+        if not user:
+            user = User(
+                email=demo_email,
+                full_name="Demo User",
+                hashed_password='',
+                is_active=True
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        return user
+
+    # Handle JWT token
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")

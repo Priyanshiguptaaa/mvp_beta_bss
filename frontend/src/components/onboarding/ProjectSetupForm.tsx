@@ -63,30 +63,54 @@ export function ProjectSetupForm() {
   }, [setValue]);
 
   const onSubmit = async (data: ProjectFormData) => {
-    // Prepare members array for API
-    const members = teamEmails.map(email => ({ email, role: 'member' }));
-    const payload = {
-      name: data.name,
-      description: data.description,
-      color_scheme: data.colorScheme,
-      members,
-    };
-
     try {
+      // Prepare members array for API
+      const members = teamEmails.map(email => ({ email, role: 'member' }));
+      const payload = {
+        name: data.name,
+        description: data.description,
+        color_scheme: data.colorScheme,
+        members,
+      };
+
+      console.log('Creating project with payload:', payload);
+
       // Create a demo token if not exists
       if (!localStorage.getItem('authToken')) {
         const demoToken = "demo_token_" + Date.now();
         localStorage.setItem("authToken", demoToken);
       }
 
+      // Get the API URL
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URL not configured');
+      }
+
       // Create project via API
-      const project = await api.createProject(payload);
+      const response = await fetch(`${apiUrl}/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to create project');
+      }
+
+      const project = await response.json();
+      console.log('Project created successfully:', project);
+
       sessionStorage.setItem('projectData', JSON.stringify(project));
       setProjectData(project);
       router.push('/onboarding/tools');
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      alert('An error occurred while creating the project.');
+      alert(`Error creating project: ${error.message || 'An unexpected error occurred'}`);
     }
   };
 

@@ -1,10 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from "recharts";
 
-// Mock data
-const hallucinationRate = [3.1, 2.9, 1.8, 4.2, 3.5, 2.1, 1.9]; // last 7 days
-const driftTimeline = [0, 1, 2, 1, 0, 3, 1]; // drift events per day
-const accuracySpread = [0.91, 0.88, 0.93, 0.85, 0.82, 0.89, 0.90]; // %
+// Mock data from provided example
+const hallucinationRate = [3.1, 2.9, 1.8, 4.2, 3.5, 2.1, 1.9];
+const driftTimeline = [0, 1, 2, 1, 0, 3, 1];
+const accuracySpread = [0.91, 0.88, 0.93, 0.85, 0.82, 0.89, 0.90];
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 

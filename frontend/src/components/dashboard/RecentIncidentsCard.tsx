@@ -4,38 +4,36 @@ import Link from "next/link";
 
 const incidents = [
   {
-    id: 1,
-    title: "Finance Agent Failure",
-    summary: "Model failed to process Q2 report queries.",
-    status: "Needs review",
-    statusColor: "orange",
-    time: "12 min ago",
-    rcaLink: "/rca/1"
+    id: "inc_78421",
+    title: "Lead Prioritization Agent Drift",
+    summary: "High-value leads ranked lower due to outdated product signals.",
+    status: "Needs Review",
+    time: "17 min ago",
+    rcaLink: "/rca/lead-drift"
   },
   {
-    id: 2,
-    title: "Data Drift Detected",
-    summary: "Input distribution drifted from baseline.",
+    id: "inc_78422",
+    title: "Sales Chatbot Hallucination",
+    summary: "Bot recommended an invalid pricing tier to customer.",
     status: "Auto-fixed",
-    statusColor: "green",
-    time: "1 hr ago",
-    rcaLink: "/rca/2"
+    time: "42 min ago",
+    rcaLink: "/rca/chatbot-pricing"
   },
   {
-    id: 3,
-    title: "API Timeout Spike",
-    summary: "API response time exceeded threshold.",
+    id: "inc_78423",
+    title: "Enrichment API Timeout",
+    summary: "Fallback triggered due to CRM data API outage.",
     status: "Fixed",
-    statusColor: "blue",
-    time: "2 hrs ago",
-    rcaLink: "/rca/3"
-  },
+    time: "2 hours ago",
+    rcaLink: "/rca/fallback-enrichment"
+  }
 ];
 
 function statusBadge(status: string) {
   if (status === "Auto-fixed") return <Badge variant="success">Auto-fixed</Badge>;
   if (status === "Fixed") return <Badge variant="secondary">Fixed</Badge>;
-  return <Badge variant="destructive">Needs review</Badge>;
+  if (status === "Needs Review") return <Badge variant="destructive">Needs Review</Badge>;
+  return <Badge variant="outline">{status}</Badge>;
 }
 
 export default function RecentIncidentsCard() {

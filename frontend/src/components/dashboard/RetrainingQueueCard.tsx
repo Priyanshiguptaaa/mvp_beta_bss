@@ -4,22 +4,22 @@ import { Progress } from "@/components/ui/progress";
 
 const jobs = [
   {
-    id: 1,
-    name: "Retrain Finance Model",
+    id: "job_993",
+    name: "Retrain Lead Prioritization on March Qualified Leads",
     status: "In Progress",
     percent: 65,
     awaitingApproval: false,
   },
   {
-    id: 2,
-    name: "Feedback Incorporation",
+    id: "job_994",
+    name: "Sales Chatbot Prompt Refinement",
     status: "Awaiting Approval",
     percent: 100,
     awaitingApproval: true,
   },
   {
-    id: 3,
-    name: "Update Data Pipeline",
+    id: "job_995",
+    name: "Update Enrichment Agent with new CRM schema",
     status: "Completed",
     percent: 100,
     awaitingApproval: false,
@@ -29,7 +29,8 @@ const jobs = [
 function statusBadge(status: string) {
   if (status === "Completed") return <Badge variant="success">Completed</Badge>;
   if (status === "In Progress") return <Badge variant="secondary">In Progress</Badge>;
-  return <Badge variant="destructive">Awaiting Approval</Badge>;
+  if (status === "Awaiting Approval") return <Badge variant="destructive">Awaiting Approval</Badge>;
+  return <Badge variant="outline">{status}</Badge>;
 }
 
 export default function RetrainingQueueCard() {

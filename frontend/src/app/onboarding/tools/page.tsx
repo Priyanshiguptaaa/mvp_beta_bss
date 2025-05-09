@@ -56,10 +56,15 @@ export default function OnboardingToolsPage() {
   const [projectData, setProjectData] = useState<any>(null);
 
   useEffect(() => {
-    // Restore project data from sessionStorage
-    const stored = sessionStorage.getItem('projectData');
-    if (stored) {
-      setProjectData(JSON.parse(stored));
+    if (typeof window !== 'undefined') {
+      const stored = sessionStorage.getItem('projectData');
+      if (stored) {
+        try {
+          setProjectData(JSON.parse(stored));
+        } catch (e) {
+          console.error('Failed to parse stored project data:', e);
+        }
+      }
     }
   }, []);
 
@@ -81,29 +86,25 @@ export default function OnboardingToolsPage() {
     if (step < categories.length - 1) {
       setStep(step + 1);
     } else {
-      // Complete setup: save selected tools to backend
-      const projectData = sessionStorage.getItem('projectData');
-      if (projectData) {
-        const project = JSON.parse(projectData);
+      if (typeof window !== 'undefined' && projectData) {
         // Build integrations object by category
         const integrations: Record<string, string[]> = {};
         categories.forEach((cat, idx) => {
           integrations[cat.key] = selected[idx];
         });
         try {
-          console.log('PATCHING integrations for project', project.id, integrations);
-          const resp = await api.updateProjectIntegrations(project.id, integrations);
-          console.log('PATCH response:', resp);
-          // Optionally update sessionStorage
-          project.integrations = integrations;
-          sessionStorage.setItem('projectData', JSON.stringify(project));
+          await api.updateProjectIntegrations(projectData.id, integrations);
+          // Update sessionStorage
+          projectData.integrations = integrations;
+          sessionStorage.setItem('projectData', JSON.stringify(projectData));
         } catch (e) {
           console.error('Failed to save integrations:', e);
           alert('Failed to save integrations.');
+          return;
         }
       }
-      // Redirect to dashboard or next step
-      router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
+      // Redirect to dashboard
+      router.push('/dashboard');
     }
   };
 

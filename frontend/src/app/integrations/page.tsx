@@ -26,26 +26,11 @@ export default function IntegrationsPage() {
   useEffect(() => {
     const fetchProjectAndIntegrations = async () => {
       try {
-        // Check if we have an auth token
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-          setError('Please log in to view integrations');
-          setLoading(false);
-          return;
-        }
-
-        console.log('Fetching projects...');
         const projects = await api.getMyProjects();
-        console.log('Projects:', projects);
-
         if (projects && projects.length > 0) {
-          const project = projects[0]; // Get the first project for now
-          console.log('Selected project:', project);
+          const project = projects[0];
           setProjectId(project.id);
-
-          console.log('Fetching integrations for project:', project.id);
           const data = await api.getProjectIntegrations(project.id);
-          console.log('Integrations data:', data);
           setIntegrations(data.integrations || {});
         } else {
           setError('No projects found. Please create a project first.');
@@ -71,7 +56,6 @@ export default function IntegrationsPage() {
     setUpdating(true);
     
     try {
-      console.log('Updating integrations:', updated);
       await api.updateProjectIntegrations(projectId, updated);
       toast.success('Integration removed successfully');
     } catch (err) {

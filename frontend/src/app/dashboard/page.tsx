@@ -43,16 +43,18 @@ export default function DashboardPage() {
         if (projects && projects.length > 0) {
           setProject(projects[0]);
           // Find the current user's role in the project
-          const authToken = localStorage.getItem('authToken');
-          let userEmail = null;
-          if (authToken) {
-            try {
-              const payload = JSON.parse(atob(authToken.split('.')[1]));
-              userEmail = payload.sub;
-            } catch {}
+          if (typeof window !== 'undefined') {
+            const authToken = localStorage.getItem('authToken');
+            let userEmail = null;
+            if (authToken) {
+              try {
+                const payload = JSON.parse(atob(authToken.split('.')[1]));
+                userEmail = payload.sub;
+              } catch {}
+            }
+            const member = projects[0]?.members?.find((m: any) => m.email === userEmail);
+            setUserRole(member?.role || null);
           }
-          const member = projects[0].members.find((m: any) => m.email === userEmail);
-          setUserRole(member?.role || null);
         }
       } catch (err) {
         setError('Failed to fetch dashboard data');
@@ -70,7 +72,9 @@ export default function DashboardPage() {
     setInviteLoading(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const token = localStorage.getItem('authToken');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+      if (!token) throw new Error('Not authenticated');
+      
       const resp = await fetch(`${apiUrl}/projects/${project.id}/invite`, {
         method: 'POST',
         headers: {

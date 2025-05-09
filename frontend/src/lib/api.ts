@@ -10,26 +10,40 @@ function getAuthHeaders(contentType = false) {
   return headers;
 }
 
+const getAuthToken = () => {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('authToken');
+};
+
 export const api = {
   // System Health
   getSystemHealth: async (): Promise<SystemHealth> => {
-    const response = await fetch(`${API_BASE_URL}/system_health`);
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     if (!response.ok) throw new Error('Failed to fetch system health');
     return response.json();
   },
 
   // Models
   getModels: async (): Promise<Model[]> => {
-    const response = await fetch(`${API_BASE_URL}/models`);
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/models`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     if (!response.ok) throw new Error('Failed to fetch models');
     return response.json();
   },
 
   // Incidents
   getIncidents: async (status?: string): Promise<Incident[]> => {
+    const token = getAuthToken();
     const url = new URL(`${API_BASE_URL}/incidents`);
     if (status) url.searchParams.append('status', status);
-    const response = await fetch(url.toString());
+    const response = await fetch(url.toString(), {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     if (!response.ok) throw new Error('Failed to fetch incidents');
     return response.json();
   },
@@ -81,16 +95,13 @@ export const api = {
   },
 
   getMyProjects: async () => {
-    const response = await fetch(`${API_BASE_URL}/projects/mine`, {
-      headers: getAuthHeaders(),
+    const token = getAuthToken();
+    if (!token) return [];
+    const response = await fetch(`${API_BASE_URL}/projects/my`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    if (!response.ok) {
-      console.error('Failed to fetch projects:', await response.text());
-      throw new Error('Failed to fetch projects');
-    }
-    const data = await response.json();
-    console.log('Projects data:', data);
-    return data;
+    if (!response.ok) throw new Error('Failed to fetch projects');
+    return response.json();
   },
 
   getProjectIntegrations: async (projectId: number) => {
@@ -106,16 +117,18 @@ export const api = {
     return data;
   },
 
-  updateProjectIntegrations: async (projectId: number, integrations: any) => {
+  updateProjectIntegrations: async (projectId: number, integrations: Record<string, string[]>) => {
+    const token = getAuthToken();
+    if (!token) throw new Error('Not authenticated');
     const response = await fetch(`${API_BASE_URL}/projects/${projectId}/integrations`, {
       method: 'PATCH',
-      headers: getAuthHeaders(true),
-      body: JSON.stringify(integrations),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ integrations }),
     });
-    if (!response.ok) {
-      console.error('Failed to update integrations:', await response.text());
-      throw new Error('Failed to update integrations');
-    }
+    if (!response.ok) throw new Error('Failed to update integrations');
     return response.json();
   },
 }; 

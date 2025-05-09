@@ -21,16 +21,13 @@ def create_project(
     current_user: User = Depends(get_current_user)
 ):
     try:
-        logger.info(
-            f"Creating project: {project.name} for user: {current_user.email}"
-        )
+        logger.info(f"Creating project: {project.name} for user: {current_user.email}")
+        logger.debug(f"Project data: {project.dict()}")
         
         # Check if project with the same name exists
         db_project = db.query(Project).filter(Project.name == project.name).first()
         if db_project:
-            logger.info(
-                f"Project {project.name} already exists, adding user as member"
-            )
+            logger.info(f"Project {project.name} already exists, adding user as member")
             # Add user as member if not already
             member = db.query(ProjectMember).filter(
                 ProjectMember.project_id == db_project.id,
@@ -46,7 +43,6 @@ def create_project(
                 db.add(db_member)
                 db.commit()
             db.refresh(db_project)
-            db_project.members  # load members
             return db_project
 
         logger.info("Creating new project")
@@ -55,12 +51,10 @@ def create_project(
             description=project.description,
             color_scheme=project.color_scheme,
             owner_id=current_user.id,
-            integrations=(
-                project.integrations if project.integrations is not None else {}
-            )
+            integrations=project.integrations or {}
         )
         db.add(db_project)
-        db.flush()  # Get project ID
+        db.flush()
 
         # Add owner as member
         logger.info("Adding owner as member")
@@ -72,22 +66,21 @@ def create_project(
         )
         db.add(owner_member)
 
-        # Add other members
-        logger.info(f"Adding {len(project.members)} additional members")
-        for member in project.members:
-            if member.email == current_user.email:
-                continue  # skip owner if in list
-            db_member = ProjectMember(
-                project_id=db_project.id,
-                user_id=member.user_id,
-                email=member.email,
-                role=member.role
-            )
-            db.add(db_member)
+        # Add other members if any
+        if project.members:
+            logger.info(f"Adding {len(project.members)} additional members")
+            for member in project.members:
+                if member.email == current_user.email:
+                    continue  # skip owner if in list
+                db_member = ProjectMember(
+                    project_id=db_project.id,
+                    email=member.email,
+                    role=member.role
+                )
+                db.add(db_member)
 
         db.commit()
         db.refresh(db_project)
-        db_project.members  # load members
         logger.info(f"Project created successfully with ID: {db_project.id}")
         return db_project
 

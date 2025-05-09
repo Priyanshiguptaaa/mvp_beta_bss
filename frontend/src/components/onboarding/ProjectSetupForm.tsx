@@ -71,20 +71,19 @@ export function ProjectSetupForm() {
         description: data.description,
         color_scheme: data.colorScheme,
         members,
+        integrations: {}
       };
 
       console.log('Creating project with payload:', payload);
 
-      // Create a demo token if not exists
-      if (!localStorage.getItem('authToken')) {
-        const demoToken = "demo_token_" + Date.now();
-        localStorage.setItem("authToken", demoToken);
-      }
-
       // Get the API URL
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (!apiUrl) {
-        throw new Error('API URL not configured');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      console.log('Using API URL:', apiUrl);
+
+      // Get auth token
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        throw new Error('No authentication token found');
       }
 
       // Create project via API
@@ -92,21 +91,25 @@ export function ProjectSetupForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Project creation failed:', errorData);
         throw new Error(errorData.detail || 'Failed to create project');
       }
 
       const project = await response.json();
       console.log('Project created successfully:', project);
 
+      // Store project data
       sessionStorage.setItem('projectData', JSON.stringify(project));
       setProjectData(project);
+      
+      // Redirect to tools page
       router.push('/onboarding/tools');
     } catch (error: any) {
       console.error('Error submitting form:', error);

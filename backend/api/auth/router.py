@@ -30,7 +30,7 @@ limiter = Limiter(key_func=get_remote_address)
 # GitHub OAuth config
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
-GITHUB_CALLBACK_URL = os.getenv("GITHUB_CALLBACK_URL", "http://localhost:8000/auth/github/callback")
+GITHUB_CALLBACK_URL = f"https://{os.getenv('RAILWAY_PUBLIC_DOMAIN')}/auth/github/callback"
 
 config = Config(environ={
     'GITHUB_CLIENT_ID': GITHUB_CLIENT_ID,
@@ -193,34 +193,29 @@ async def register(
     """
     Register a new user.
     """
-    # Log the raw request body
-    body = await request.body()
-    logger.info(f"Raw request body: {body}")
-    logger.info(f"Content-Type header: {request.headers.get('content-type')}")
-    logger.info(f"Parsed user_data: {user_data}")
-    logger.info(f"Attempting to register user: {user_data.email}")
-    
     try:
-        # Validate email
-        if not validate_email(user_data.email):
-            logger.warning(f"Invalid email format: {user_data.email}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid email format"
-            )
-        
-        # Validate password
-        if not validate_password(user_data.password):
-            logger.warning("Invalid password format")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Password must be at least 6 characters long"
-            )
+        # Log the raw request body
+        body = await request.body()
+        logger.info(f"Raw request body: {body}")
+        logger.info(f"Content-Type header: {request.headers.get('content-type')}")
+        logger.info(f"Parsed user_data: {user_data}")
+        logger.info(f"Attempting to register user: {user_data.email}")
         
         # Check if user already exists
         existing_user = db.query(User).filter(User.email == user_data.email).first()
         if existing_user:
-            logger.warning(f"User already exists: {user_data.email}")
+            logger.info(f"User already exists: {user_data.email}")
+            # If it's a demo user, return their token
+            if user_data.email.startswith('demo_'):
+                access_token = create_access_token(
+                    data={"sub": user_data.email},
+                    expires_delta=timedelta(days=7)  # Demo tokens last longer
+                )
+                return TokenResponse(
+                    user=UserResponse.from_orm(existing_user),
+                    token=access_token,
+                    expires_in=7 * 24 * 60 * 60  # 7 days in seconds
+                )
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered"
@@ -237,9 +232,9 @@ async def register(
         )
         
         db.add(db_user)
-        db.flush()  # Flush to get the user ID
+        db.flush()
         
-        # Create single audit log
+        # Create audit log
         audit_log = AuditLog(
             user_id=db_user.id,
             action_type="register",
@@ -252,12 +247,12 @@ async def register(
         )
         db.add(audit_log)
         
-        # Commit both user and audit log in a single transaction
+        # Commit both user and audit log
         db.commit()
         logger.info(f"User created successfully: {db_user.id}")
         
         # Create access token
-        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(days=7 if user_data.email.startswith('demo_') else settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user_data.email},
             expires_delta=access_token_expires
@@ -266,7 +261,7 @@ async def register(
         return TokenResponse(
             user=UserResponse.from_orm(db_user),
             token=access_token,
-            expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+            expires_in=7 * 24 * 60 * 60 if user_data.email.startswith('demo_') else settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
         )
         
     except Exception as e:

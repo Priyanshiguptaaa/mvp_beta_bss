@@ -80,3 +80,241 @@ cd frontend && npm install sonner
 npm install sonner
    alembic revision --autogenerate -m "add integrations column to projects"
    pip install itsdangerous
+   cd frontend\
+   npm run dev
+npm run dev
+npm run dev
+railway up
+brew install railwayapp/tap/railway
+brew install railwayapp/tap/nixpacks
+git status
+git add .
+git commit -m "trying to fix railway backend
+git commit -m "trying to fix railway backend"
+git push
+railway login
+railway login
+brew install railwayapp/tap/nixpacks
+railway login
+brew install railway
+railway login
+railway link
+railway up
+git status
+git add .
+git commit -m "fix 2"
+git push
+railway up
+railway up
+railway up
+ls -l backend/
+ls -l backend/config/
+railway up
+railway up
+railway up
+railway up
+railway up
+clear
+railway up
+s?
+railway up
+git add .
+git dstatus
+git status
+git commit -m "adding rca"
+git push
+railway up
+git add .
+git commit -m "fixing type error"
+git push
+git add .
+git status
+git commit -m "fixing auth"
+git push
+git status
+git status
+git add .
+git commit -m "fixing flow:
+git commit -m "fixing flow"
+git push
+git status
+git status
+git add .
+git commit -m "fix 3"
+git push
+git add .
+git commit -m "fix4"
+git add .
+git commit -m "fix 4"
+git push
+git status
+git add ,
+git add .
+git commit -m "fix 5"
+git push
+git add .
+git commit -m "fix 6"
+git push
+git add .
+git commit -m "skip github auth"
+git push
+git add .
+git commit -m "git push"
+git push
+git add .
+git commit -m "trying to fix"
+git add .
+git commit -m "fix 7"
+git push
+git status
+git add .
+git commit -m "fixing"
+git push
+git add .
+git commit -m "fix dockerfile"
+git push
+git add .
+git commit -m "docker fix"
+git push
+   curl -i http://localhost:8000/projects/1/integrations
+  curl -i -H "Authorization: Bearer <your_token>" http://localhost:8000/projects/1/integrations
+git init
+git add .
+git status
+git commit -m "basic onboaring"
+git remote add origin https://github.com/Priyanshiguptaaa/MVP_beta.git
+git remote set-url origin https://github.com/Priyanshiguptaaa/MVP_beta.git
+git push -u origin main
+git push -u origin main
+git pull
+git pull --rebase origin main
+git add -A
+git rebase --continue
+git push -u origin main
+git rebase --abort
+git status
+git push
+git ls-files | grep node_modules
+ls -lhR | grep -E 'node_modules|.venv|.db|.sqlite|.log'
+git rm -r --cached node_modules .venv backend/data/echosys.db\
+git commit -m "Remove node_modules, .venv, and db from repo"
+git pull
+git add .
+git status
+git ls-files | grep node_modules\
+git ls-files | grep -E '.db$|.sqlite$|.log$|.venv'
+git ls-files | grep -E '.db$|.sqlite$|.log$|.venv'
+git rm --cached backend/logs/app.log
+git ls-files | grep -E '.db$|.sqlite$|.log$|.venv'
+git rm --cached node_modules/scheduler/unstable_post_task.js
+git rm --cached backend/logs/app.log
+git ls-files | grep node_modules\
+git ls-files | grep -E '.db$|.sqlite$|.log$|.venv'
+git rm -r --cached node_modules
+   git ls-files | grep node_modules | xargs git rm --cached
+git staus
+git status
+git add .gitignore
+git add .gitignore
+git add .
+git status
+git commit -m "remoived node modules from git"
+git push
+git ls-files | grep -E '.db$|.sqlite$|.log$|.venv'
+   rm -rf .git
+   git init\
+   echo "node_modules/\n.venv/\n*.db\n*.sqlite\n*.log\n__pycache__/\n.env\n.env.*\n.DS_Store" > .gitignore\
+   git add .\
+   git commit -m "Clean initial commit"
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git\
+   git branch -M main\
+   git push -u origin main
+git remote add origin https://github.com/Priyanshiguptaaa/mvp_beta.git
+git remote add origin https://github.com/Priyanshiguptaaa/mvp_beta_bss.git
+git remote set-url origin https://github.com/Priyanshiguptaaa/mvp_beta_bss.git
+git status
+git add .
+git status
+ls
+git remote -v
+git push -u origin main
+cd frontend\
+npm install @hookform/resolvers zod @radix-ui/react-label
+git add .
+git statis
+git status
+git commit -m "adding dependencies for frontend deploymnet"
+git push
+   git add src/components/ui/card.tsx\
+   git commit -m "Fix Card component typing for Framer Motion compatibility"\
+   git push
+git diff
+git add src/app/auth/callback/page.tsx\
+git commit -m "Fix: force dynamic rendering for auth callback page"\
+git push
+git add .
+git commit -m "trying to fix"
+git push
+cd ..
+ls
+   git add frontend/src/app/auth/callback/page.tsx frontend/src/app/auth/callback/AuthCallbackInner.tsx\
+   git commit -m "Fix: wrap useSearchParams in Suspense boundary for /auth/callback"\
+   git push
+git pull
+   git add frontend/src/app/auth/callback/page.tsx frontend/src/app/auth/callback/AuthCallbackInner.tsx\
+   git commit -m "Fix: wrap useSearchParams in Suspense boundary for /auth/callback"\
+   git push
+git status
+   git add frontend/src/app/auth/callback/page.tsx frontend/src/app/auth/callback/AuthCallbackInner.tsx\
+   git commit -m "Fix: wrap useSearchParams in Suspense boundary for /auth/callback"\
+   git push
+os.environ.get("VARIABLE_NAME")
+   pip install starlette python-multipart
+git add .
+git status
+git commit -m "adidng vercel connection to railway"
+git push
+git add .
+git status
+git commit -m "adding base url for vercel"
+git push
+git status
+git status
+git add .
+git commit -m "trying to fix railway backend:\
+
+git commit -m "trying to fix railway backend"
+git push
+cd ../backend && uvicorn main:app --reload
+cd backend
+uvicorn main:app --reload
+pip install uvicorn
+uvicorn main:app --reload
+pip install fastapi
+uvicorn main:app --reload
+pip install sqlalchemy
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+uvicorn main:app --reload
+   python testing/synthetic_data_agent.py
+   python testing/synthetic_data_agent.py
+     ls -l synthetic_agent_issues.json
+   uvicorn testing.ingestion_agent:app --reload
+   pip install fastapi uvicorn sqlalchemy pydantic
+     curl http://127.0.0.1:8000/all
+   python testing/post_scenarios.py
+   uvicorn testing.ingestion_agent:app --reload
+   python testing/post_scenarios.py
+     python testing/post_scenarios.py
+     python testing/synthetic_data_agent.py
+   uvicorn testing.ingestion_agent:app --reload
+   uvicorn testing.ingestion_agent:app --reload
+  python -m json.tool example_scenario.json
+ython testing/post_scenarios.py
+python3 testing/post_scenarios.py
+  uvicorn testing.ingestion_agent:app --reload

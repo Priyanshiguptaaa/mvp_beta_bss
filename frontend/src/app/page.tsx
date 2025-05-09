@@ -17,16 +17,39 @@ const FEATURES = [
 export default function StartPage() {
   const router = useRouter();
 
-  const handleLogin = () => {
-    // Check for token
-    const token = localStorage.getItem("authToken");
-    if (token) {
+  const handleLogin = async () => {
+    try {
+      // Check for token
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        router.replace("/dashboard");
+        return;
+      }
+
+      // Create a demo user
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: `demo_${Date.now()}@example.com`,
+          password: 'demo123',
+          full_name: 'Demo User'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create demo user');
+      }
+
+      const data = await response.json();
+      localStorage.setItem("authToken", data.token);
       router.replace("/dashboard");
-    } else {
-      // For demo purposes, create a simple token
-      const demoToken = "demo_token_" + Date.now();
-      localStorage.setItem("authToken", demoToken);
-      router.replace("/dashboard");
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Failed to login. Please try again.');
     }
   };
 

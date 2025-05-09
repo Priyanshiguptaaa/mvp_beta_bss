@@ -1,0 +1,542 @@
+[
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "8b4f8dcb-a588-4859-b29e-adfc4b63278f",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "89d0a08c-4bee-4560-9c25-7fba88781491"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "7ca0fb7e-cf72-44a0-a18f-e97dc2bf0935",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "89d0a08c-4bee-4560-9c25-7fba88781491",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:08",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 776,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 243,
+      "throughput": 55,
+      "error_rate": 0.05,
+      "resource_usage": {
+        "cpu": 0.6,
+        "memory": 152
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "8ef8b7ec-43f1-45c1-892f-2b05bf433ca5",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "02946143-413b-4853-9e5e-6ee221567b07"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "ce2f13ae-10fa-4e7e-a85c-a3cbca27bb34",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "02946143-413b-4853-9e5e-6ee221567b07",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:04",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 2865,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 106,
+      "throughput": 24,
+      "error_rate": 0.07,
+      "resource_usage": {
+        "cpu": 0.25,
+        "memory": 458
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "753b1559-8f0c-4d62-9cbf-72d89f536eb7",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "20114c68-e474-4305-a65e-67dc8a37a011"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "4f71b210-f448-4abb-aa3c-a904673a9674",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "20114c68-e474-4305-a65e-67dc8a37a011",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:06",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 1731,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 437,
+      "throughput": 21,
+      "error_rate": 0.04,
+      "resource_usage": {
+        "cpu": 0.37,
+        "memory": 162
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "5139c8d9-443b-4d3b-b931-8d719aa7c4ff",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "32c3ffa3-4dda-4e57-8ded-746f5d6d10bf"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "694a342a-86d8-448f-906d-9bb98c39cf0f",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "32c3ffa3-4dda-4e57-8ded-746f5d6d10bf",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:04",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 2795,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 775,
+      "throughput": 75,
+      "error_rate": 0.06,
+      "resource_usage": {
+        "cpu": 0.98,
+        "memory": 350
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "f3b8a4da-4929-4a4b-a8ff-81aa19a9b24b",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "a24c7e26-a018-4ebd-987b-7984717f548d"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "c5924489-c6d7-4b28-9d5b-cb1b8728a341",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "a24c7e26-a018-4ebd-987b-7984717f548d",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:02",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 2846,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 992,
+      "throughput": 80,
+      "error_rate": 0.02,
+      "resource_usage": {
+        "cpu": 0.39,
+        "memory": 129
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "e61cc904-117e-48b3-b8f5-a2e3bb1e07fa",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "dda34237-f84a-487d-9d06-57eb3239e8f8"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "0bb6240f-3091-4cf4-8cb7-f02a4115d1db",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "dda34237-f84a-487d-9d06-57eb3239e8f8",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:08",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 218,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 200,
+      "throughput": 48,
+      "error_rate": 0.04,
+      "resource_usage": {
+        "cpu": 0.67,
+        "memory": 122
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "eefdbd54-e662-4c68-a9b1-c1511553ccba",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "d1823e5f-3b23-4804-8e40-17bc3537c7b0"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "a1f7d9ce-4ea8-4abe-962c-82568fb4e84f",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "d1823e5f-3b23-4804-8e40-17bc3537c7b0",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:11",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 1743,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 694,
+      "throughput": 80,
+      "error_rate": 0.08,
+      "resource_usage": {
+        "cpu": 0.55,
+        "memory": 175
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "f655ffd6-34b9-4cfd-8b94-d14f0055abc5",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "f0030414-b400-48b0-92bf-f4bbbe1eb9b2"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "829f7e13-f182-4b7e-bbb4-aecf95f728a9",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "f0030414-b400-48b0-92bf-f4bbbe1eb9b2",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:07",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 546,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 676,
+      "throughput": 52,
+      "error_rate": 0.07,
+      "resource_usage": {
+        "cpu": 0.9,
+        "memory": 350
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "c3aac488-4c6d-4307-9fea-dbe3ffb7fdb5",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "c8462493-8ce7-4a4d-959f-42e3b6184c45"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "aee1fc89-97c2-45b8-bd2e-5c19284683d2",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "c8462493-8ce7-4a4d-959f-42e3b6184c45",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:03",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 1142,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 481,
+      "throughput": 16,
+      "error_rate": 0.09,
+      "resource_usage": {
+        "cpu": 0.53,
+        "memory": 110
+      }
+    }
+  },
+  {
+    "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+    "system_output": "Meeting scheduled successfully",
+    "prod_logs": [
+      {
+        "log_id": "b1032dbf-2a63-4f30-b80a-c129d2c5dca6",
+        "timestamp": "2025-05-07T05:18:12",
+        "log_level": "ERROR",
+        "service": "calendar_service",
+        "message": "Failed to create calendar event: Timezone conversion failed.",
+        "details": {
+          "input_timezone": "UTC",
+          "target_timezone": "America/New_York"
+        },
+        "trace_id": "b304d887-c371-46eb-8a77-06236b31e9aa"
+      }
+    ],
+    "llm_calls": [
+      {
+        "call_id": "c6faa2cb-ef6b-4eeb-b69f-29d459a9bca3",
+        "timestamp": "2025-05-07T05:18:12",
+        "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+        "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+        "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+        "confidence": 0.95,
+        "parent_call_id": null,
+        "metadata": {
+          "step": "parse_request"
+        }
+      }
+    ],
+    "traces": [
+      {
+        "trace_id": "b304d887-c371-46eb-8a77-06236b31e9aa",
+        "parent_id": null,
+        "service": "calendar_service",
+        "operation": "create_event",
+        "start_time": "2025-05-07T05:18:11",
+        "end_time": "2025-05-07T05:18:12",
+        "duration_ms": 1632,
+        "status": "ERROR",
+        "attributes": {}
+      }
+    ],
+    "metrics": {
+      "latency_ms": 986,
+      "throughput": 31,
+      "error_rate": 0.04,
+      "resource_usage": {
+        "cpu": 0.96,
+        "memory": 412
+      }
+    }
+  }
+]

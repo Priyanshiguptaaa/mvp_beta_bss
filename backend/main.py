@@ -13,6 +13,8 @@ from api.database.database import engine
 from api.models.database import Base as DatabaseBase
 from api.routes import api_router
 from api.auth.router import router as auth_router
+from api.endpoints import projects
+from config.settings import settings
 
 # Set up logging
 log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
@@ -56,25 +58,15 @@ except Exception as e:
 is_development = os.getenv("ENVIRONMENT", "development") == "development"
 
 app = FastAPI(
-    title="EchoSysAI RCA System",
-    description="API for EchosysAI platform - Trace Analysis and Issue Management",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    title="EchosysAI API",
+    description="API for EchosysAI platform",
+    version="1.0.0"
 )
 
-# Configure CORS - MUST be before any routes
-origins = [
-    "https://mvp-beta-bss.vercel.app",  # Frontend URL
-    "http://localhost:3000",            # Local development
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
-
-# Add CORS middleware with explicit configuration
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # In production, replace with actual frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -101,8 +93,9 @@ async def db_session_middleware(request: Request, call_next):
             db.close()
     return response
 
-# Include the auth router
+# Include routers
 app.include_router(auth_router)
+app.include_router(projects.router)
 
 # Include the main API router
 app.include_router(api_router)

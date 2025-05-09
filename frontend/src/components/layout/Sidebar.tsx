@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -38,7 +39,7 @@ export default function Sidebar() {
             key={item.label}
             href={item.href}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 ${
-              pathname.startsWith(item.href) ? "bg-blue-100 text-blue-700" : ""
+              pathname && pathname.startsWith(item.href) ? "bg-blue-100 text-blue-700" : ""
             }`}
           >
             {item.icon}
@@ -55,7 +56,7 @@ export default function Sidebar() {
             key={item.label}
             href={item.href}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-500 hover:bg-gray-100 hover:text-blue-600 ${
-              pathname.startsWith(item.href) ? "bg-blue-50 text-blue-700" : ""
+              pathname && pathname.startsWith(item.href) ? "bg-blue-50 text-blue-700" : ""
             }`}
           >
             {item.icon}

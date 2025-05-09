@@ -1,5 +1,5 @@
-export const dynamic = "force-dynamic";
 "use client";
+export const dynamic = "force-dynamic";
 import { ProjectSetupForm } from '@/components/onboarding/ProjectSetupForm';
 import { useRouter } from "next/navigation";
 import React from "react";

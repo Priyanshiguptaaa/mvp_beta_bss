@@ -134,7 +134,13 @@ export function ProjectSetupForm() {
         router.push('/onboarding/tools');
       } catch (fetchError) {
         console.error('Fetch error:', fetchError);
-        throw new Error(`Network error: ${fetchError.message}`);
+        let message = 'Unknown error';
+        if (fetchError instanceof Error) {
+          message = fetchError.message;
+        } else if (typeof fetchError === 'string') {
+          message = fetchError;
+        }
+        throw new Error(`Network error: ${message}`);
       }
     } catch (error: any) {
       console.error('Error submitting form:', error);

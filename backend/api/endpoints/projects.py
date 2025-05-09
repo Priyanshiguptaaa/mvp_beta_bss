@@ -21,13 +21,19 @@ def create_project(
     current_user: User = Depends(get_current_user)
 ):
     try:
-        logger.info(f"Creating project: {project.name} for user: {current_user.email}")
+        logger.info(
+            f"Creating project: {project.name} for user: {current_user.email}"
+        )
         logger.debug(f"Project data: {project.dict()}")
         
         # Check if project with the same name exists
-        db_project = db.query(Project).filter(Project.name == project.name).first()
+        db_project = db.query(Project).filter(
+            Project.name == project.name
+        ).first()
         if db_project:
-            logger.info(f"Project {project.name} already exists, adding user as member")
+            logger.info(
+                f"Project {project.name} already exists, adding user as member"
+            )
             # Add user as member if not already
             member = db.query(ProjectMember).filter(
                 ProjectMember.project_id == db_project.id,
@@ -117,8 +123,19 @@ def invite_member(
 ):
     # Only owner can invite
     project = db.query(Project).filter(Project.id == project_id).first()
-    if not project or project.owner_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    # Check if current user is an owner in ProjectMember
+    owner_member = db.query(ProjectMember).filter(
+        ProjectMember.project_id == project_id,
+        ProjectMember.user_id == current_user.id,
+        ProjectMember.role == "owner"
+    ).first()
+    if not owner_member:
+        raise HTTPException(
+            status_code=403,
+            detail="Only project owners can invite members"
+        )
     db_member = ProjectMember(
         project_id=project_id,
         user_id=member.user_id,

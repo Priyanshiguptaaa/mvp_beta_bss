@@ -95,7 +95,6 @@ async def db_session_middleware(request: Request, call_next):
 
 # Include routers
 app.include_router(auth_router)
-app.include_router(projects.router)
 
 # Include the main API router
 app.include_router(api_router)

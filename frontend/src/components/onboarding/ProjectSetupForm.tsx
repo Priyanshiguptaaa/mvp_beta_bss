@@ -86,31 +86,56 @@ export function ProjectSetupForm() {
         throw new Error('No authentication token found');
       }
 
-      // Create project via API
-      const response = await fetch(`${apiUrl}/projects`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
+      console.log('Making request to:', `${apiUrl}/projects/`);
+      console.log('With headers:', {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Project creation failed:', errorData);
-        throw new Error(errorData.detail || 'Failed to create project');
+      // Create project via API
+      try {
+        const response = await fetch(`${apiUrl}/projects/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response text:', errorText);
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch (e) {
+            errorData = { detail: errorText };
+          }
+          console.error('Project creation failed:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData
+          });
+          throw new Error(errorData.detail || `Failed to create project: ${response.status} ${response.statusText}`);
+        }
+
+        const project = await response.json();
+        console.log('Project created successfully:', project);
+
+        // Store project data
+        sessionStorage.setItem('projectData', JSON.stringify(project));
+        setProjectData(project);
+        
+        // Redirect to tools page
+        router.push('/onboarding/tools');
+      } catch (fetchError) {
+        console.error('Fetch error:', fetchError);
+        throw new Error(`Network error: ${fetchError.message}`);
       }
-
-      const project = await response.json();
-      console.log('Project created successfully:', project);
-
-      // Store project data
-      sessionStorage.setItem('projectData', JSON.stringify(project));
-      setProjectData(project);
-      
-      // Redirect to tools page
-      router.push('/onboarding/tools');
     } catch (error: any) {
       console.error('Error submitting form:', error);
       alert(`Error creating project: ${error.message || 'An unexpected error occurred'}`);

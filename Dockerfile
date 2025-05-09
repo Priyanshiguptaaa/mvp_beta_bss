@@ -10,6 +10,9 @@ COPY backend/ ./backend/
 # Set working directory to backend
 WORKDIR /app/backend
 
+# Add backend directory to Python path
+ENV PYTHONPATH=/app/backend
+
 # Install dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 

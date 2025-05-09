@@ -71,7 +71,7 @@ export const api = {
 
   // Projects
   createProject: async (data: any) => {
-    const response = await fetch(`${API_BASE_URL}/projects`, {
+    const response = await fetch(`${API_BASE_URL}/projects/`, {
       method: 'POST',
       headers: getAuthHeaders(true),
       body: JSON.stringify(data),

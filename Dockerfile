@@ -21,11 +21,12 @@ FROM python:3.11-slim
 # Set work directory
 WORKDIR /app
 
+# Copy requirements and install in final stage
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Copy backend code
 COPY backend/ ./backend/
-
-# Copy installed packages from builder
-COPY --from=builder /usr/local/lib/python3.11/site-packages/ /usr/local/lib/python3.11/site-packages/
 
 # Add backend directory to Python path
 ENV PYTHONPATH=/app/backend

@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle2, Clock, Activity, TrendingUp, RefreshCw, AlertTriangle } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock, Activity, TrendingUp, RefreshCw, AlertTriangle, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
@@ -96,107 +96,46 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-      {/* 1. Today's Snapshot */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Activity className="w-5 h-5" />Today's Snapshot</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <Stat label="Incidents" value={4} />
-            <Stat label="Failed Tests" value={2} />
-            <Stat label="Auto-fixed" value={3} />
-            <Stat label="Pending Fixes" value={1} />
-            <Stat label="Hallucinations" value={2} />
-          </div>
-          <div className="mb-2">
-            <span className="font-semibold">Quick Filters:</span>
-            <div className="flex gap-2 mt-2">
-              <Button size="sm" variant="outline">Finance Agent</Button>
-              <Button size="sm" variant="outline">Only Hallucinations</Button>
-            </div>
-          </div>
-          <div>
-            <span className="font-semibold">Upcoming Scheduled Tests:</span>
-            <ul className="list-disc ml-6 text-sm mt-1">
-              <li>Finance Agent - 2:00pm</li>
-              <li>Sales Agent - 4:00pm</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 2. Suggestions / At-Risk Warnings */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-yellow-500" />Suggestions & At-Risk Warnings</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc ml-6 text-sm space-y-2">
-            <li>This domain is drifting</li>
-            <li>Fallbacks triggered 10+ times today</li>
-            <li>Model X failed 3 times on Y-type queries</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      {/* 3. Top 3 Recent Incidents */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><AlertCircle className="w-5 h-5" />Top 3 Recent Incidents</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[{id:1,summary:'Finance agent misclassified lead',status:'Auto-fixed'},{id:2,summary:'Hallucination in sales summary',status:'Needs review'},{id:3,summary:'Fallback triggered 10+ times',status:'Fixed'}].map((incident) => (
-              <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <h3 className="font-medium">{incident.summary}</h3>
-                  <p className="text-xs text-muted-foreground">Status: <span className="font-semibold">{incident.status}</span></p>
-                </div>
-                <Button variant="outline" size="sm">View RCA</Button>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 4. Model Reliability Graphs (Mocked) */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><TrendingUp className="w-5 h-5" />Model Reliability</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="font-semibold">Hallucination Rate (last 7/30 days)</div>
-            <div className="h-24 bg-gradient-to-r from-blue-200 to-blue-400 rounded mb-2 flex items-center justify-center text-xs text-blue-900">[Graph Placeholder]</div>
-            <div className="font-semibold">Drift Detection Timeline</div>
-            <div className="h-16 bg-gradient-to-r from-yellow-100 to-yellow-300 rounded mb-2 flex items-center justify-center text-xs text-yellow-900">[Graph Placeholder]</div>
-            <div className="font-semibold">Accuracy & Confidence Spread</div>
-            <div className="h-16 bg-gradient-to-r from-green-100 to-green-300 rounded flex items-center justify-center text-xs text-green-900">[Graph Placeholder]</div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 5. Retraining Queue or Feedback Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><RefreshCw className="w-5 h-5" />Retraining Queue</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc ml-6 text-sm space-y-2">
-            <li>Job #1234 - 80% completed</li>
-            <li>Job #1235 - Awaiting user approval</li>
-            <li>Job #1236 - 20% completed</li>
-          </ul>
-        </CardContent>
-      </Card>
-
+    <div className="min-h-screen bg-[#fafbfc] p-6">
+      <h1 className="text-3xl font-extrabold mb-8">AI Model Monitoring Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Metric Cards */}
+        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Tokens/sec" value="1.2K" trend="↑ 12%" trendColor="text-green-600" info="Tokens processed per second" />
+        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Prompt Latency" value="450ms" trend="↑ 8%" trendColor="text-green-600" info="Average response time" />
+        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Hallucination Rate" value="2.3%" trend="↓ 0.5%" trendColor="text-red-500" info="Model hallucination rate" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Action Cards */}
+        <ActionCard icon={<Info className="w-5 h-5 text-purple-500" />} title="Root Cause Analysis" description="Analyze incidents and investigate performance issues" />
+        <ActionCard icon={<RefreshCw className="w-5 h-5 text-purple-500" />} title="Test Scheduler" description="Schedule and manage tests for your AI models" />
+        <ActionCard icon={<TrendingUp className="w-5 h-5 text-purple-500" />} title="DeepEval Metrics" description="View metrics for comprehensive AI evaluation" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Model Status */}
+        <Card className="rounded-xl shadow bg-white p-6">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold">Model Status</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <ModelStatusCard name="Product Recommender" status="Online" lastRun="10 min ago" server="US-West" hallucinations="2.1%" />
+            <ModelStatusCard name="Customer Support" status="Online" lastRun="15 min ago" server="EU-Central" hallucinations="1.8%" />
+          </CardContent>
+        </Card>
+        {/* Recent Incidents */}
+        <Card className="rounded-xl shadow bg-white p-6">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold">Recent Incidents</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <IncidentCard title="Critical AI Incidents" impact="Critical" status="Investigating" description="Urgent AI operations issues that need immediate attention" time="10 min ago" />
+          </CardContent>
+        </Card>
+      </div>
       {/* Invite Member (Owner Only) */}
       {userRole === 'owner' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Invite Team Member</CardTitle>
+        <Card className="rounded-xl shadow bg-white p-6 max-w-md mt-8">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold">Invite Team Member</CardTitle>
           </CardHeader>
           <CardContent>
             <Button onClick={() => setShowInvite(true)} className="bg-blue-600 text-white">Invite Member</Button>
@@ -227,11 +166,59 @@ export default function DashboardPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function MetricCard({ icon, label, value, trend, trendColor, info }: any) {
   return (
-    <div className="flex flex-col items-center">
-      <span className="text-2xl font-bold">{value}</span>
-      <span className="text-xs text-gray-500">{label}</span>
+    <Card className="rounded-xl shadow bg-white p-6 flex flex-col gap-2">
+      <div className="flex items-center gap-2 mb-1">
+        {icon}
+        <span className="text-sm font-semibold">{label}</span>
+        <span className="ml-1" title={info}><Info className="w-4 h-4 text-gray-400" /></span>
+      </div>
+      <div className="text-2xl font-bold">{value}</div>
+      <div className={`text-xs ${trendColor}`}>{trend}</div>
+    </Card>
+  );
+}
+
+function ActionCard({ icon, title, description }: any) {
+  return (
+    <Card className="rounded-xl shadow bg-white p-6 flex flex-col gap-2 cursor-pointer hover:shadow-lg transition">
+      <div className="flex items-center gap-2 mb-1">
+        {icon}
+        <span className="text-sm font-semibold">{title}</span>
+      </div>
+      <div className="text-xs text-gray-500">{description}</div>
+    </Card>
+  );
+}
+
+function ModelStatusCard({ name, status, lastRun, server, hallucinations }: any) {
+  return (
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between border rounded-lg p-4 mb-2 bg-gray-50">
+      <div>
+        <div className="font-semibold">{name}</div>
+        <div className="text-xs text-gray-500">Last Run: {lastRun}</div>
+        <div className="text-xs text-gray-500">Server: {server}</div>
+      </div>
+      <div className="flex flex-col items-end mt-2 md:mt-0">
+        <Badge variant="success">{status}</Badge>
+        <div className="text-xs text-green-600 mt-1">Hallucinations: {hallucinations}</div>
+      </div>
+    </div>
+  );
+}
+
+function IncidentCard({ title, impact, status, description, time }: any) {
+  return (
+    <div className="border rounded-lg p-4 bg-gray-50 mb-2">
+      <div className="flex items-center gap-2 mb-1">
+        <AlertCircle className="w-4 h-4 text-red-500" />
+        <span className="font-semibold text-red-600">{title}</span>
+        <Badge variant="destructive">{impact}</Badge>
+        <span className="text-xs text-gray-400 ml-auto">{time}</span>
+      </div>
+      <div className="text-xs text-gray-700 mb-1">{description}</div>
+      <Badge variant="outline" className="text-xs text-orange-600 border-orange-400 bg-orange-50">{status}</Badge>
     </div>
   );
 } 

@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 const FEATURES = [
   "AI-powered trace analysis",
@@ -17,56 +18,9 @@ const FEATURES = [
 export default function StartPage() {
   const router = useRouter();
 
-  const handleLogin = async () => {
-    try {
-      // Check for token
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        router.replace("/dashboard");
-        return;
-      }
-
-      // Create a demo user
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: `demo_${Date.now()}@example.com`,
-          password: 'demo123',
-          full_name: 'Demo User'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create demo user');
-      }
-
-      const data = await response.json();
-      localStorage.setItem("authToken", data.token);
-      router.replace("/dashboard");
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Failed to login. Please try again.');
-    }
-  };
-
   const handleSignup = () => {
     router.push("/create-team");
   };
-
-  useEffect(() => {
-    // Autofill from sessionStorage if available
-    if (typeof window !== "undefined") {
-      const pending = sessionStorage.getItem('pendingProject');
-      if (pending) {
-        const data = JSON.parse(pending);
-        // You can prefill any form fields you need here
-      }
-    }
-  }, []);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6a8dff] via-[#a084ee] to-[#e0c3fc]">
@@ -84,28 +38,16 @@ export default function StartPage() {
             Transform your AI-powered system reliability with real-time diagnostics and intelligent debugging — all powered by natural language tests and automated root cause analysis.
           </p>
           <div className="flex gap-4 mb-8">
-            <Button size="lg" className="px-8 text-base font-semibold" onClick={handleLogin}>
-              Login
-            </Button>
             <Button size="lg" variant="secondary" className="px-8 text-base font-semibold" onClick={handleSignup}>
               Sign Up
             </Button>
           </div>
           <div className="text-sm text-gray-500 mt-2">Trusted by leading enterprises worldwide</div>
         </div>
-        {/* Right: Features Card */}
-        <div className="flex-1 flex items-center justify-center p-8">
-          <Card className="w-full max-w-md p-8 bg-white/90 shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Key Features</h2>
-            <ul className="space-y-3">
-              {FEATURES.map((feature) => (
-                <li key={feature} className="flex items-center gap-2 text-gray-700">
-                  <CheckCircle2 className="text-blue-500 w-5 h-5" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </Card>
+
+        {/* Right: Login Form */}
+        <div className="flex-1 p-12 bg-white">
+          <LoginForm />
         </div>
       </section>
     </main>

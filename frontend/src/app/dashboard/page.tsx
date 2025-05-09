@@ -9,6 +9,11 @@ import { Button } from '@/components/ui/button';
 import { AlertCircle, CheckCircle2, Clock, Activity, TrendingUp, RefreshCw, AlertTriangle, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import TodaySnapshotCard from "@/components/dashboard/TodaySnapshotCard";
+import RecentIncidentsCard from "@/components/dashboard/RecentIncidentsCard";
+import ModelReliabilityCard from "@/components/dashboard/ModelReliabilityCard";
+import RetrainingQueueCard from "@/components/dashboard/RetrainingQueueCard";
+import SuggestionsCard from "@/components/dashboard/SuggestionsCard";
 
 export default function DashboardPage() {
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
@@ -96,73 +101,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] p-6">
-      <h1 className="text-3xl font-extrabold mb-8">AI Model Monitoring Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* Metric Cards */}
-        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Tokens/sec" value="1.2K" trend="↑ 12%" trendColor="text-green-600" info="Tokens processed per second" />
-        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Prompt Latency" value="450ms" trend="↑ 8%" trendColor="text-green-600" info="Average response time" />
-        <MetricCard icon={<Activity className="w-5 h-5 text-purple-500" />} label="Hallucination Rate" value="2.3%" trend="↓ 0.5%" trendColor="text-red-500" info="Model hallucination rate" />
+    <main className="min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e0e7ff] p-6">
+      <h1 className="text-3xl md:text-4xl font-extrabold mb-8 text-gray-900">📊 Command Center</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <TodaySnapshotCard />
+        <RecentIncidentsCard />
+        <ModelReliabilityCard />
+        <RetrainingQueueCard />
+        <SuggestionsCard />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* Action Cards */}
-        <ActionCard icon={<Info className="w-5 h-5 text-purple-500" />} title="Root Cause Analysis" description="Analyze incidents and investigate performance issues" />
-        <ActionCard icon={<RefreshCw className="w-5 h-5 text-purple-500" />} title="Test Scheduler" description="Schedule and manage tests for your AI models" />
-        <ActionCard icon={<TrendingUp className="w-5 h-5 text-purple-500" />} title="DeepEval Metrics" description="View metrics for comprehensive AI evaluation" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Model Status */}
-        <Card className="rounded-xl shadow bg-white p-6">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-bold">Model Status</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <ModelStatusCard name="Product Recommender" status="Online" lastRun="10 min ago" server="US-West" hallucinations="2.1%" />
-            <ModelStatusCard name="Customer Support" status="Online" lastRun="15 min ago" server="EU-Central" hallucinations="1.8%" />
-          </CardContent>
-        </Card>
-        {/* Recent Incidents */}
-        <Card className="rounded-xl shadow bg-white p-6">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-bold">Recent Incidents</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <IncidentCard title="Critical AI Incidents" impact="Critical" status="Investigating" description="Urgent AI operations issues that need immediate attention" time="10 min ago" />
-          </CardContent>
-        </Card>
-      </div>
-      {/* Invite Member (Owner Only) */}
-      {userRole === 'owner' && (
-        <Card className="rounded-xl shadow bg-white p-6 max-w-md mt-8">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-bold">Invite Team Member</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => setShowInvite(true)} className="bg-blue-600 text-white">Invite Member</Button>
-            {showInvite && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-                  <h2 className="text-lg font-bold mb-2">Invite Team Member</h2>
-                  <Input
-                    type="email"
-                    placeholder="Enter email"
-                    value={inviteEmail}
-                    onChange={e => setInviteEmail(e.target.value)}
-                    className="mb-4"
-                  />
-                  <div className="flex gap-2 justify-end">
-                    <Button variant="outline" onClick={() => setShowInvite(false)} disabled={inviteLoading}>Cancel</Button>
-                    <Button onClick={handleInvite} disabled={inviteLoading || !inviteEmail}>
-                      {inviteLoading ? 'Inviting...' : 'Invite'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-    </div>
+    </main>
   );
 }
 

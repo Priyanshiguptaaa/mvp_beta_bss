@@ -45,9 +45,19 @@ export default function StartPage() {
           <div className="text-sm text-gray-500 mt-2">Trusted by leading enterprises worldwide</div>
         </div>
 
-        {/* Right: Login Form */}
-        <div className="flex-1 p-12 bg-white">
-          <LoginForm />
+        {/* Right: Features Card */}
+        <div className="flex-1 flex items-center justify-center p-8">
+          <Card className="w-full max-w-md p-8 bg-white/90 shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Key Features</h2>
+            <ul className="space-y-3">
+              {FEATURES.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-gray-700">
+                  <CheckCircle2 className="text-blue-500 w-5 h-5" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </Card>
         </div>
       </section>
     </main>

@@ -97,11 +97,20 @@ export const api = {
   getMyProjects: async () => {
     const token = getAuthToken();
     if (!token) return [];
-    const response = await fetch(`${API_BASE_URL}/projects/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error('Failed to fetch projects');
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/projects/mine`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to fetch projects:', errorText);
+        throw new Error(`Failed to fetch projects: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      throw error;
+    }
   },
 
   getProjectIntegrations: async (projectId: number) => {

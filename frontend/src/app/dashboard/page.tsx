@@ -22,31 +22,49 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // First check if we have an auth token
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found. Please log in.');
+        }
+
+        // Fetch data in parallel
         const [health, incidentsData, projects] = await Promise.all([
-          api.getSystemHealth(),
-          api.getIncidents(),
-          api.getMyProjects(),
+          api.getSystemHealth().catch(err => {
+            console.error('Error fetching system health:', err);
+            return null;
+          }),
+          api.getIncidents().catch(err => {
+            console.error('Error fetching incidents:', err);
+            return [];
+          }),
+          api.getMyProjects().catch(err => {
+            console.error('Error fetching projects:', err);
+            return [];
+          }),
         ]);
+
         setSystemHealth(health);
         setIncidents(incidentsData);
+        
         if (projects && projects.length > 0) {
           setProject(projects[0]);
-          if (typeof window !== 'undefined') {
-            const authToken = localStorage.getItem('authToken');
-            let userEmail = null;
-            if (authToken) {
-              try {
-                const payload = JSON.parse(atob(authToken.split('.')[1]));
-                userEmail = payload.sub;
-              } catch {}
-            }
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const userEmail = payload.sub;
             const member = projects[0]?.members?.find((m: any) => m.email === userEmail);
             setUserRole(member?.role || null);
+          } catch (err) {
+            console.error('Error parsing token:', err);
           }
+        } else {
+          toast.error('No projects found. Please create a project first.');
         }
       } catch (err) {
-        setError('Failed to fetch dashboard data');
-        console.error(err);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch dashboard data';
+        setError(errorMessage);
+        toast.error(errorMessage);
+        console.error('Dashboard data fetch error:', err);
       } finally {
         setLoading(false);
       }
@@ -59,7 +77,18 @@ export default function DashboardPage() {
   }
 
   if (error) {
-    return <div className="flex items-center justify-center min-h-screen text-red-500">{error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-red-500">
+        <h2 className="text-xl font-semibold mb-2">Error Loading Dashboard</h2>
+        <p>{error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   return (

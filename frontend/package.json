@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
+    "@hello-pangea/dnd": "^18.0.1",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-checkbox": "^1.2.3",

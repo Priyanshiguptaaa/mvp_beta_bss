@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   AlertCircle,
@@ -36,35 +37,61 @@ export default function Sidebar() {
     <aside className="flex flex-col h-full w-64 bg-white border-r shadow-sm justify-between py-6 px-4">
       {/* Main nav */}
       <nav className="flex flex-col gap-2">
-        {mainNav.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 ${
-              pathname && pathname.startsWith(item.href) ? "bg-blue-100 text-blue-700" : ""
-            }`}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </Link>
-        ))}
+        {mainNav.map((item) => {
+          const selected = pathname && pathname.startsWith(item.href);
+          return (
+            <Link key={item.label} href={item.href} legacyBehavior passHref>
+              <motion.a
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition-colors text-gray-700
+                  ${selected ? "bg-purple-200 text-purple-800 shadow-sm" : "hover:bg-purple-100 hover:text-purple-700"}
+                `}
+                style={{ position: 'relative', overflow: 'hidden' }}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+                {selected && (
+                  <motion.div
+                    layoutId="sidebar-active-tab"
+                    className="absolute inset-0 rounded-lg bg-purple-300/30 z-[-1]"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </motion.a>
+            </Link>
+          );
+        })}
       </nav>
       {/* Divider */}
       <div className="my-4 border-t border-gray-200" />
       {/* Bottom nav */}
       <nav className="flex flex-col gap-2 text-sm">
-        {bottomNav.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-500 hover:bg-gray-100 hover:text-blue-600 ${
-              pathname && pathname.startsWith(item.href) ? "bg-blue-50 text-blue-700" : ""
-            }`}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </Link>
-        ))}
+        {bottomNav.map((item) => {
+          const selected = pathname && pathname.startsWith(item.href);
+          return (
+            <Link key={item.label} href={item.href} legacyBehavior passHref>
+              <motion.a
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium
+                  ${selected ? "bg-purple-100 text-purple-800 shadow-sm" : "hover:bg-purple-50 hover:text-purple-700 text-gray-500"}
+                `}
+                style={{ position: 'relative', overflow: 'hidden' }}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+                {selected && (
+                  <motion.div
+                    layoutId="sidebar-active-bottom-tab"
+                    className="absolute inset-0 rounded-lg bg-purple-200/40 z-[-1]"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </motion.a>
+            </Link>
+          );
+        })}
       </nav>
     </aside>
   );

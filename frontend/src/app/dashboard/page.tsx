@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle2, Clock, Activity } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock, Activity, TrendingUp, RefreshCw, AlertTriangle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
@@ -96,122 +96,142 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Invite Member (Owner Only) */}
-      {userRole === 'owner' && (
-        <div className="mb-4">
-          <Button onClick={() => setShowInvite(true)} className="bg-blue-600 text-white">Invite Member</Button>
-          {showInvite && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-                <h2 className="text-lg font-bold mb-2">Invite Team Member</h2>
-                <Input
-                  type="email"
-                  placeholder="Enter email"
-                  value={inviteEmail}
-                  onChange={e => setInviteEmail(e.target.value)}
-                  className="mb-4"
-                />
-                <div className="flex gap-2 justify-end">
-                  <Button variant="outline" onClick={() => setShowInvite(false)} disabled={inviteLoading}>Cancel</Button>
-                  <Button onClick={handleInvite} disabled={inviteLoading || !inviteEmail}>
-                    {inviteLoading ? 'Inviting...' : 'Invite'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {/* System Health Card */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+      {/* 1. Today's Snapshot */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="w-5 h-5" />
-            System Health
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2"><Activity className="w-5 h-5" />Today's Snapshot</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Models</p>
-              <p className="text-2xl font-bold">{systemHealth?.total_models}</p>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <Stat label="Incidents" value={4} />
+            <Stat label="Failed Tests" value={2} />
+            <Stat label="Auto-fixed" value={3} />
+            <Stat label="Pending Fixes" value={1} />
+            <Stat label="Hallucinations" value={2} />
+          </div>
+          <div className="mb-2">
+            <span className="font-semibold">Quick Filters:</span>
+            <div className="flex gap-2 mt-2">
+              <Button size="sm" variant="outline">Finance Agent</Button>
+              <Button size="sm" variant="outline">Only Hallucinations</Button>
             </div>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active Models</p>
-              <p className="text-2xl font-bold">{systemHealth?.active_models}</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Open Incidents</p>
-              <p className="text-2xl font-bold">{systemHealth?.open_incidents}</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">System Status</p>
-              <Badge variant={systemHealth?.system_status === 'healthy' ? 'success' : 'destructive'}>
-                {systemHealth?.system_status}
-              </Badge>
-            </div>
+          </div>
+          <div>
+            <span className="font-semibold">Upcoming Scheduled Tests:</span>
+            <ul className="list-disc ml-6 text-sm mt-1">
+              <li>Finance Agent - 2:00pm</li>
+              <li>Sales Agent - 4:00pm</li>
+            </ul>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recent Incidents */}
+      {/* 2. Suggestions / At-Risk Warnings */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5" />
-            Recent Incidents
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-yellow-500" />Suggestions & At-Risk Warnings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc ml-6 text-sm space-y-2">
+            <li>This domain is drifting</li>
+            <li>Fallbacks triggered 10+ times today</li>
+            <li>Model X failed 3 times on Y-type queries</li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* 3. Top 3 Recent Incidents */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><AlertCircle className="w-5 h-5" />Top 3 Recent Incidents</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {incidents.slice(0, 5).map((incident) => (
+            {[{id:1,summary:'Finance agent misclassified lead',status:'Auto-fixed'},{id:2,summary:'Hallucination in sales summary',status:'Needs review'},{id:3,summary:'Fallback triggered 10+ times',status:'Fixed'}].map((incident) => (
               <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="space-y-1">
-                  <h3 className="font-medium">{incident.title}</h3>
-                  <p className="text-sm text-muted-foreground">{incident.description}</p>
+                  <h3 className="font-medium">{incident.summary}</h3>
+                  <p className="text-xs text-muted-foreground">Status: <span className="font-semibold">{incident.status}</span></p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant={incident.status === 'resolved' ? 'success' : 'destructive'}>
-                    {incident.status}
-                  </Badge>
-                  <Button variant="outline" size="sm">
-                    View Details
-                  </Button>
-                </div>
+                <Button variant="outline" size="sm">View RCA</Button>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Model Status */}
+      {/* 4. Model Reliability Graphs (Mocked) */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5" />
-            Model Status
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2"><TrendingUp className="w-5 h-5" />Model Reliability</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {models.map((model) => (
-              <div key={model.id} className="p-4 border rounded-lg space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium">{model.name}</h3>
-                  <Badge variant={model.status === 'active' ? 'success' : 'secondary'}>
-                    {model.status}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">Version: {model.version}</p>
-                <p className="text-sm text-muted-foreground">
-                  Last Updated: {new Date(model.last_updated).toLocaleString()}
-                </p>
-              </div>
-            ))}
+          <div className="space-y-2">
+            <div className="font-semibold">Hallucination Rate (last 7/30 days)</div>
+            <div className="h-24 bg-gradient-to-r from-blue-200 to-blue-400 rounded mb-2 flex items-center justify-center text-xs text-blue-900">[Graph Placeholder]</div>
+            <div className="font-semibold">Drift Detection Timeline</div>
+            <div className="h-16 bg-gradient-to-r from-yellow-100 to-yellow-300 rounded mb-2 flex items-center justify-center text-xs text-yellow-900">[Graph Placeholder]</div>
+            <div className="font-semibold">Accuracy & Confidence Spread</div>
+            <div className="h-16 bg-gradient-to-r from-green-100 to-green-300 rounded flex items-center justify-center text-xs text-green-900">[Graph Placeholder]</div>
           </div>
         </CardContent>
       </Card>
+
+      {/* 5. Retraining Queue or Feedback Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><RefreshCw className="w-5 h-5" />Retraining Queue</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc ml-6 text-sm space-y-2">
+            <li>Job #1234 - 80% completed</li>
+            <li>Job #1235 - Awaiting user approval</li>
+            <li>Job #1236 - 20% completed</li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Invite Member (Owner Only) */}
+      {userRole === 'owner' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Invite Team Member</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => setShowInvite(true)} className="bg-blue-600 text-white">Invite Member</Button>
+            {showInvite && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+                  <h2 className="text-lg font-bold mb-2">Invite Team Member</h2>
+                  <Input
+                    type="email"
+                    placeholder="Enter email"
+                    value={inviteEmail}
+                    onChange={e => setInviteEmail(e.target.value)}
+                    className="mb-4"
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <Button variant="outline" onClick={() => setShowInvite(false)} disabled={inviteLoading}>Cancel</Button>
+                    <Button onClick={handleInvite} disabled={inviteLoading || !inviteEmail}>
+                      {inviteLoading ? 'Inviting...' : 'Invite'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="flex flex-col items-center">
+      <span className="text-2xl font-bold">{value}</span>
+      <span className="text-xs text-gray-500">{label}</span>
     </div>
   );
 } 

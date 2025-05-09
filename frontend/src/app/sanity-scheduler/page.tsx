@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar } from "lucide-react";
+import Spinner from '@/components/ui/Spinner';
 
 const mockTests = [
   { date: "2025-05-06", status: "failed" },
@@ -37,26 +38,82 @@ function getTestsForDate(date: string) {
 export default function SanitySchedulerPage() {
   const [tab, setTab] = useState("scheduled");
   const [selectedDate, setSelectedDate] = useState("2025-05-09");
+  const [rcaResults, setRcaResults] = useState<any[]>([]); // RCA Console data
+  const [incidents, setIncidents] = useState<any[]>([]); // Incidents data
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    title: '',
+    type: 'Pipeline Test',
+    date: '',
+    time: '',
+    services: [] as string[],
+    description: '',
+  });
+  const [formError, setFormError] = useState('');
 
   // Generate calendar days for May 2025
   const daysInMonth = 31;
   const firstDay = new Date("2025-05-01").getDay();
   const calendarDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
+  const handleFormChange = (field: string, value: any) => {
+    setForm(f => ({ ...f, [field]: value }));
+    if (field === 'services' && value.length > 0) setFormError('');
+  };
+
+  const handleServiceToggle = (service: string) => {
+    setForm(f => {
+      const exists = f.services.includes(service);
+      const newServices = exists ? f.services.filter(s => s !== service) : [...f.services, service];
+      return { ...f, services: newServices };
+    });
+    setFormError('');
+  };
+
+  const handleScheduleTest = async () => {
+    if (!form.title || !form.type || !form.date || !form.time || form.services.length === 0) {
+      setFormError('Select at least one service and fill all fields');
+      return;
+    }
+    setLoading(true);
+    setFormError('');
+    try {
+      const res = await fetch('/api/sanity-scheduler/run-test', { method: 'POST' });
+      const data = await res.json();
+      // Assume data.result is either JSON or text
+      const rca = typeof data.result === 'string' ? { summary: data.result } : data.result;
+      setRcaResults(prev => [rca, ...prev]);
+      setIncidents(prev => [{
+        title: form.title,
+        date: form.date,
+        status: 'Auto-Resolved',
+        summary: rca.summary || 'See RCA Console',
+        ...rca,
+      }, ...prev]);
+      setTab('rca-console');
+    } catch (e) {
+      setFormError('Failed to schedule test.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="max-w-6xl mx-auto py-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-5xl mx-auto py-10 px-4">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Test Scheduler</h1>
-          <div className="text-gray-500">Schedule automated tests to detect issues and trigger RCA workflows</div>
+          <h1 className="text-4xl font-extrabold mb-1 text-gray-900">Test Scheduler</h1>
+          <div className="text-lg text-gray-500">Schedule automated tests to detect issues and trigger RCA workflows</div>
         </div>
-        <Button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">Create New Test</Button>
+        <Button className="bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-semibold px-7 py-2 rounded-full shadow-lg transition">Create New Test</Button>
       </div>
-      <Tabs value={tab} onValueChange={setTab} className="w-full mb-6">
-        <TabsList className="mb-4">
+      <Tabs value={tab} onValueChange={setTab} className="w-full mb-8">
+        <TabsList className="mb-6 bg-white/80 rounded-xl shadow flex gap-2 p-2">
           <TabsTrigger value="scheduled">Scheduled Tests</TabsTrigger>
           <TabsTrigger value="results">Test Results</TabsTrigger>
           <TabsTrigger value="create">Create Test</TabsTrigger>
+          <TabsTrigger value="rca-console">RCA Console</TabsTrigger>
+          <TabsTrigger value="incidents">Incidents</TabsTrigger>
         </TabsList>
         <AnimatePresence mode="wait">
           {tab === "scheduled" && (
@@ -142,9 +199,107 @@ export default function SanitySchedulerPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.25 }}
-                className="p-6"
+                className="p-8 bg-white/80 rounded-2xl shadow-xl max-w-2xl mx-auto"
               >
-                <div className="text-center text-gray-400">Create Test form coming soon...</div>
+                <form className="space-y-8">
+                  <div>
+                    <label className="block font-semibold text-lg mb-2 text-gray-900">Test Title</label>
+                    <input type="text" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-purple-300 focus:outline-none bg-gray-50" value={form.title} onChange={e => handleFormChange('title', e.target.value)} placeholder="Enter test title" />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-lg mb-2 text-gray-900">Test Type</label>
+                    <select className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base bg-gray-50" value={form.type} onChange={e => handleFormChange('type', e.target.value)}>
+                      <option>Pipeline Test</option>
+                      <option>Unit Test</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-6">
+                    <div className="flex-1">
+                      <label className="block font-semibold text-lg mb-2 text-gray-900">Date</label>
+                      <input type="date" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base bg-gray-50" value={form.date} onChange={e => handleFormChange('date', e.target.value)} />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block font-semibold text-lg mb-2 text-gray-900">Time</label>
+                      <input type="time" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base bg-gray-50" value={form.time} onChange={e => handleFormChange('time', e.target.value)} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-lg mb-2 text-gray-900">Services to Test</label>
+                    <div className="flex flex-wrap gap-2 mb-1">
+                      {["Data Pipeline", "Retrieval", "Model Training", "Inference Engine", "Recommendation Engine", "Question Answering", "Content Generation", "Classification", "User Interface", "API Gateway"].map(service => (
+                        <button
+                          type="button"
+                          key={service}
+                          className={`px-4 py-1.5 rounded-full border text-base font-medium transition shadow-sm ${form.services.includes(service) ? 'bg-gradient-to-r from-purple-200 to-purple-300 border-purple-400 text-purple-800' : 'bg-white border-gray-300 text-gray-700 hover:bg-purple-50'}`}
+                          onClick={() => handleServiceToggle(service)}
+                        >
+                          {service}
+                        </button>
+                      ))}
+                    </div>
+                    {form.services.length === 0 && <div className="text-red-500 text-sm mt-1">Select at least one service</div>}
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-lg mb-2 text-gray-900">Description</label>
+                    <textarea className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base bg-gray-50" rows={3} value={form.description} onChange={e => handleFormChange('description', e.target.value)} placeholder="Describe the test purpose and expected outcomes" />
+                  </div>
+                  {formError && <div className="text-red-500 text-base font-medium mt-2">{formError}</div>}
+                  <div className="flex justify-end gap-3 mt-6">
+                    <Button type="button" variant="outline" className="rounded-full px-6 py-2 text-base font-semibold" onClick={() => setTab('scheduled')}>Cancel</Button>
+                    <Button type="button" className="bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white font-semibold px-8 py-2 rounded-full shadow-lg transition flex items-center gap-2" onClick={handleScheduleTest} disabled={loading}>
+                      {loading && <Spinner size={18} />} Schedule Test
+                    </Button>
+                  </div>
+                </form>
+              </motion.div>
+            </TabsContent>
+          )}
+          {tab === "rca-console" && (
+            <TabsContent value="rca-console" forceMount>
+              <motion.div
+                key="rca-console"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+                className="p-8 bg-purple-50 rounded-2xl shadow-xl max-w-3xl mx-auto"
+              >
+                <h2 className="text-2xl font-bold mb-6 text-purple-800">RCA Console</h2>
+                {rcaResults.length === 0 ? (
+                  <div className="text-gray-400">No RCA results yet.</div>
+                ) : (
+                  rcaResults.map((rca, idx) => (
+                    <Card key={idx} className="mb-6 p-6 bg-white/90 border-l-4 border-purple-400 rounded-xl shadow">
+                      <div className="font-semibold text-purple-700 mb-2 text-lg">{rca.title || 'RCA Result'}</div>
+                      <div className="text-gray-700 whitespace-pre-line text-base">{rca.summary || JSON.stringify(rca, null, 2)}</div>
+                    </Card>
+                  ))
+                )}
+              </motion.div>
+            </TabsContent>
+          )}
+          {tab === "incidents" && (
+            <TabsContent value="incidents" forceMount>
+              <motion.div
+                key="incidents"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+                className="p-8 bg-red-50 rounded-2xl shadow-xl max-w-3xl mx-auto"
+              >
+                <h2 className="text-2xl font-bold mb-6 text-red-700">Incidents</h2>
+                {incidents.length === 0 ? (
+                  <div className="text-gray-400">No incidents yet.</div>
+                ) : (
+                  incidents.map((incident, idx) => (
+                    <Card key={idx} className="mb-6 p-6 bg-white/90 border-l-4 border-red-400 rounded-xl shadow">
+                      <div className="font-semibold text-red-700 mb-2 text-lg">{incident.title || 'Incident'}</div>
+                      <div className="text-gray-700 whitespace-pre-line text-base">{incident.summary || JSON.stringify(incident, null, 2)}</div>
+                      <div className="text-xs text-gray-500 mt-2">{incident.date} | Status: {incident.status}</div>
+                    </Card>
+                  ))
+                )}
               </motion.div>
             </TabsContent>
           )}

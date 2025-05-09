@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import Spinner from '@/components/ui/Spinner';
 
 const categories = [
   { key: 'project', label: 'Project Management' },
@@ -90,14 +91,18 @@ export default function IntegrationsPage() {
                 {(integrations[cat.key] || []).map(tool => (
                   <div key={tool} className="flex items-center justify-between p-2 border rounded">
                     <span>{tool}</span>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      onClick={() => handleRemove(cat.key, tool)}
-                      disabled={updating}
-                    >
-                      {updating ? 'Removing...' : 'Remove'}
-                    </Button>
+                    {updating ? (
+                      <Spinner size={20} />
+                    ) : (
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleRemove(cat.key, tool)}
+                        disabled={updating}
+                      >
+                        Remove
+                      </Button>
+                    )}
                   </div>
                 ))}
               </div>

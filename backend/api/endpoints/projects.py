@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Body, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 import logging
 from api.models.database import get_db, Project, ProjectMember, User
@@ -104,14 +104,25 @@ def get_my_projects(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Projects where user is owner or member
-    projects = (
-        db.query(Project)
-        .join(ProjectMember)
-        .filter(ProjectMember.email == current_user.email)
-        .all()
-    )
-    return projects
+    """
+    Get all projects where the current user is a member or owner.
+    """
+    try:
+        # Projects where user is owner or member
+        projects = (
+            db.query(Project)
+            .join(ProjectMember)
+            .filter(ProjectMember.email == current_user.email)
+            .options(joinedload(Project.members))  # Eager load members
+            .all()
+        )
+        return projects
+    except Exception as e:
+        logger.error(f"Error fetching projects for user {current_user.email}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching projects: {str(e)}"
+        )
 
 
 @router.post("/{project_id}/invite", response_model=ProjectMemberResponse)
@@ -187,4 +198,16 @@ def update_project_integrations(
     project.integrations = integrations
     db.commit()
     db.refresh(project)
-    return {"integrations": project.integrations} 
+    return {"integrations": project.integrations}
+
+
+@router.get("/", response_model=List[ProjectResponse])
+def get_all_projects(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get all projects (admin use, or for dashboard listing all projects).
+    """
+    projects = db.query(Project).all()
+    return projects 

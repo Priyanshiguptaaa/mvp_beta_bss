@@ -1,4 +1,21 @@
-# Use official Python image
+# Build stage
+FROM python:3.11-slim as builder
+
+# Set work directory
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first to leverage Docker cache
+COPY backend/requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Final stage
 FROM python:3.11-slim
 
 # Set work directory
@@ -7,14 +24,16 @@ WORKDIR /app
 # Copy backend code
 COPY backend/ ./backend/
 
-# Set working directory to backend
-WORKDIR /app/backend
+# Copy installed packages from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages/ /usr/local/lib/python3.11/site-packages/
 
 # Add backend directory to Python path
 ENV PYTHONPATH=/app/backend
 
-# Install dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Create non-root user
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+USER appuser
 
 # Expose port (Railway will set $PORT)
 EXPOSE 8000

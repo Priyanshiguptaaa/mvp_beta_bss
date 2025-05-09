@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  LayoutDashboard,
   AlertCircle,
   CalendarCheck,
   BrainCog,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 
 const mainNav = [
+  { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
   { label: "Incidents", href: "/incidents", icon: <AlertCircle className="w-5 h-5" /> },
   { label: "Sanity Scheduler", href: "/sanity-scheduler", icon: <CalendarCheck className="w-5 h-5" /> },
   { label: "RCA Console", href: "/rca", icon: <BrainCog className="w-5 h-5" /> },

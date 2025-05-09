@@ -43,10 +43,11 @@ const TabsTrigger = React.forwardRef<
           className
         )}
         style={{ position: 'relative', overflow: 'hidden' }}
+        aria-selected={props['aria-selected']}
       >
         {props.children}
         {/* Animated background for selected tab */}
-        {props['data-state'] === 'active' && (
+        {props['aria-selected'] && (
           <motion.div
             layoutId="tabs-active-bg"
             className="absolute inset-0 rounded bg-purple-300/30 z-[-1]"

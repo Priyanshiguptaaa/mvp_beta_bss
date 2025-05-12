@@ -3,8 +3,11 @@ from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from pathlib import Path
 
+# Load environment variables from .env file
+load_dotenv()
 
-# print(f"Loaded db url: {os.getenv('DATABASE_URL')}")
+print("Environment variables loaded")
+print(f"Raw DATABASE_URL from env: {os.getenv('DATABASE_URL')}")
 
 class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-key")
@@ -15,8 +18,9 @@ class Settings(BaseSettings):
     GITHUB_CALLBACK_URL: str = os.getenv("GITHUB_CALLBACK_URL", f"https://{os.getenv('RAILWAY_PUBLIC_DOMAIN', 'localhost:8000')}/auth/github/callback")
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:ilrFlJrXsUGlHbBPQawIsLJrCmXRGIaX@ballast.proxy.rlwy.net:44749/railway")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
 
-    print(f"Loaded db url: {os.getenv('DATABASE_URL')}")
+    print(f"Settings DATABASE_URL: {DATABASE_URL}")
     # Add other settings as needed
 
 settings = Settings() 

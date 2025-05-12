@@ -7,6 +7,8 @@ from config.settings import settings
 from pydantic import ConfigDict
 import logging
 from enum import Enum as PyEnum
+import secrets
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +24,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create base class for models
 Base = declarative_base()
 
+def generate_api_key() -> str:
+    """Generate a secure API key."""
+    return secrets.token_urlsafe(32)  # 32 bytes = 43 characters in base64
+
 class User(Base):
     """SQLAlchemy model for users table."""
     __tablename__ = "users"
@@ -32,6 +38,7 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    api_key = Column(String, unique=True, index=True, default=generate_api_key)
 
     # Relationships
     traces = relationship("Trace", back_populates="user")
@@ -39,15 +46,16 @@ class User(Base):
     assigned_issues = relationship("Issue", back_populates="assigned_to_user", foreign_keys="[Issue.assigned_to]")
     audit_logs = relationship("AuditLog", back_populates="user")
     notifications = relationship("Notification", back_populates="user")
+    custom_metrics = relationship("CustomMetric", back_populates="user")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class Trace(Base):
     """SQLAlchemy model for traces table."""
     __tablename__ = "traces"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Make user_id optional
     content = Column(JSON)
     file_name = Column(String)
     file_size = Column(Integer)
@@ -60,7 +68,7 @@ class Trace(Base):
     user = relationship("User", back_populates="traces")
     issues = relationship("Issue", back_populates="trace")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class IssueStatus(str, PyEnum):
     """Enum for issue statuses."""
@@ -101,7 +109,7 @@ class Issue(Base):
     assigned_to_user = relationship("User", back_populates="assigned_issues", foreign_keys=[assigned_to])
     trace = relationship("Trace", back_populates="issues")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class AuditLog(Base):
     """SQLAlchemy model for audit_logs table."""
@@ -118,7 +126,7 @@ class AuditLog(Base):
     # Relationships
     user = relationship("User", back_populates="audit_logs")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class Notification(Base):
     """SQLAlchemy model for notifications table."""
@@ -139,7 +147,7 @@ class Notification(Base):
     # Relationships
     user = relationship("User", back_populates="notifications")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class Project(Base):
     __tablename__ = "projects"
@@ -156,7 +164,7 @@ class Project(Base):
     owner = relationship("User", backref="owned_projects")
     members = relationship("ProjectMember", back_populates="project")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
 class ProjectMember(Base):
     __tablename__ = "project_members"
@@ -171,7 +179,21 @@ class ProjectMember(Base):
     project = relationship("Project", back_populates="members")
     user = relationship("User")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
+class CustomMetric(Base):
+    __tablename__ = "custom_metrics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String, index=True)
+    description = Column(String)
+    config = Column(JSON)  # Stores metric configuration including gold standards
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationship with User
+    user = relationship("User", back_populates="custom_metrics")
 
 def get_db():
     """Dependency for getting DB session"""

@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, Body, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from ..models.database import get_db, Trace
+from ..models.database import get_db, Trace, User, generate_api_key
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 from pydantic import BaseModel
 from pathlib import Path
 import logging
 import json
+from api.auth.router import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -53,13 +54,13 @@ for subdir in ["interactions", "logs", "metrics", "traces"]:
     (DATA_DIR / subdir).mkdir(parents=True, exist_ok=True)
 
 # API key validation
-def validate_api_key(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
+def validate_api_key(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)) -> str:
     """Validate the API key from the Authorization header."""
     api_key = credentials.credentials
     
-    # In a real implementation, you would validate against a database
-    # This is just an example validation
-    if not api_key or len(api_key) < 10:
+    # Check if API key exists in database
+    user = db.query(User).filter(User.api_key == api_key).first()
+    if not user:
         raise HTTPException(
             status_code=401,
             detail="Invalid API key"
@@ -85,6 +86,11 @@ async def upload_data(
         Dictionary with upload status
     """
     try:
+        # Get user from API key
+        user = db.query(User).filter(User.api_key == api_key).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid API key")
+
         # Process interactions
         for interaction in data.interactions:
             # Convert string timestamps to datetime objects if needed
@@ -97,6 +103,7 @@ async def upload_data(
                 end_time = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
             
             trace = Trace(
+                user_id=user.id,  # Set the user_id
                 content={
                     "type": "interaction",
                     "data": {
@@ -117,6 +124,7 @@ async def upload_data(
                 timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
             
             trace = Trace(
+                user_id=user.id,  # Set the user_id
                 content={
                     "type": "log",
                     "data": {
@@ -137,6 +145,7 @@ async def upload_data(
                     timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
                 
                 trace = Trace(
+                    user_id=user.id,  # Set the user_id
                     content={
                         "type": "metric",
                         "metric_name": metric_name,
@@ -161,6 +170,7 @@ async def upload_data(
                 end_time = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
             
             trace = Trace(
+                user_id=user.id,  # Set the user_id
                 content={
                     "type": "trace",
                     "data": {
@@ -194,4 +204,41 @@ async def upload_data(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to process upload: {str(e)}"
+        )
+
+@router.post("/regenerate_api_key")
+async def regenerate_api_key(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+) -> Dict[str, str]:
+    """
+    Regenerate the API key for the current user.
+    """
+    try:
+        # Generate new API key
+        new_api_key = generate_api_key()
+        current_user.api_key = new_api_key
+        
+        # Create audit log
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action_type="regenerate_api_key",
+            resource_type="user",
+            resource_id=current_user.id,
+            meta_data={
+                "details": "API key regenerated"
+            }
+        )
+        db.add(audit_log)
+        
+        # Commit changes
+        db.commit()
+        
+        return {"api_key": new_api_key}
+    except Exception as e:
+        logger.error(f"Error regenerating API key: {str(e)}")
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Error regenerating API key"
         )

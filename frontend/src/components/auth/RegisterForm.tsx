@@ -51,8 +51,9 @@ export function RegisterForm() {
 
       const result = await response.json();
       localStorage.setItem('authToken', result.token);
+      localStorage.setItem('apiKey', result.user.api_key);
       toast.success('Registration successful');
-      router.replace('/onboarding');
+      router.replace('/settings');
     } catch (error) {
       console.error('Registration error:', error);
       toast.error(error instanceof Error ? error.message : 'Registration failed');

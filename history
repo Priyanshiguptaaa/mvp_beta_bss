@@ -318,3 +318,376 @@ uvicorn main:app --reload
 ython testing/post_scenarios.py
 python3 testing/post_scenarios.py
   uvicorn testing.ingestion_agent:app --reload
+docker-compose up --build
+git add .
+git commit -m "tetsing for containerization"
+git push
+git status
+git add .
+git commit -m "fixing dockerfile"
+git push
+git add .
+git commit -m "trying to fix docker"
+git push
+git status
+npm install
+cd frontend
+npm install
+npm run dev
+git add .
+ npm install @hello-pangea/dnd
+git add .
+git commit -m "updating deisgn"
+git push
+git add .
+git commit -m "fix frotend sisues"
+git push
+npm install
+git add .
+git commit -m "updating forntend"
+git push
+git status
+python3
+npm install
+npm run dev
+npm run dev
+./scripts/setup.sh
+git rm ../package-lock.json ../package.json
+git status
+git rm package-lock.json
+git rm package.json
+git status
+git add .
+git status
+git commit -m "removing extra package json files"
+git push
+cd frontend
+npm install
+npm run build
+npm install
+npm run build
+git add .
+git commit -m "fixed build error:
+git commit -m "fixed build error"
+git push
+git add .
+git commit -m "updating issue"
+git push
+git status
+git add .
+git commit -m "fixing"
+git push
+git status
+git status
+git add .
+git commit -m "fixing daahbaord issue"
+git push
+git status
+git status
+git add .
+git commit -m "tryuing toi dix"
+git push
+git add .
+git commit -m "trying to fix"
+git push
+cd ..
+cd backend
+docker-compose up backend
+cd ..
+docker-compose up backend
+pipenv run uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+PYTHONPATH=backend uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+railway up
+PYTHONPATH=backend uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+cd backend
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python3 
+cd ..
+git pull
+git pull
+git pull
+git pull
+git pull
+brew install python@3.11
+deactivate
+brew install python@3.11
+brew install python@3.11
+rm -rf .venv
+python3.11 -m venv .venv
+   curl -X POST http://127.0.0.1:8000/run_rca
+git add .
+git commit -m "fix: update project creation endpoint with improved error handling and logging"
+git push
+git add .
+railway up
+git add .
+git status
+git commit -m "fixing"
+git push
+git add .
+git commit -m "fixing"
+git push
+git add .
+git status
+git add .
+git status
+git commit -m "Add role based access controls"
+git push
+npm run dev
+cd frontend
+npm run dev
+npm run dev
+git add .
+git commit -m "dashbaprd update"
+git push
+git add .
+git status
+git commit -m "login fix + dashaboprd deisgn update"
+git push
+git add .
+git status
+git commit -m "updating dahbaord with mock data"
+git push
+cd ..
+npm install recharts
+git add .
+git status
+git commit -m "updating dashbaord design"
+git push
+   npm install recharts
+cd frontend
+   npm install recharts
+git add .
+git status
+git commit -m "fixing recharts"
+git push
+git add .
+git commit -m "updating design
+git commit -m "updating design"
+git push
+git add .
+git commit -m "making pages dynamic and fixing build issue"
+git push
+git add .
+git commit -m "fixing build - use client"
+git push
+git add .
+git commit -m "fixing prod"
+git push
+git add .
+git status
+git status
+git add .
+git status
+   uvicorn testing.orchestrator_agent:app --reload
+curl -X POST http://localhost:8000/ingest \\
+  -H "Content-Type: application/json" \\
+  -d @example_scenario.json
+pip install curl
+mkdir testing
+ls
+cd testing
+python3 generate_synthetic_data.py
+python3 generate_synthetic_data.py
+python3 generate_synthetic_data.py
+cd ..
+pip install lanchain openai
+pip install langchain openai
+cd testing
+ls
+python3 rca_langchain_agent.py
+pip install langchain-community
+python3 rca_langchain_agent.py
+   pip install python-dotenv
+   pip install python-dotenv
+python3 rca_langchain_agent.py
+python3 rca_langchain_agent.py
+python3 rca_langchain_agent.py
+clear
+python3 rca_langchain_agent.py
+git stash
+git stash drop
+git pull
+pip install psycopg2-binary==2.9.9
+brew install postgresql@14
+brew services start postgresql@14
+pip install psycopg2-binary==2.9.9
+pip install --upgrade pip
+pip install -r backend/requirements.txt
+cd backend && uvicorn main:app --reload
+psql -U postgres -d echosys -c "\l"
+cd backend && uvicorn main:app --reload
+cd .. && source .venv/bin/activate && cd backend && uvicorn main:app --reload
+source .venv/bin/activate
+   alembic upgrade head
+cd backend
+   alembic upgrade head
+cd backend && alembic revision --autogenerate -m "add_api_key_to_user"
+pip install alembic
+alembic revision --autogenerate -m "add_api_key_to_user"
+alembic init alembic
+cd .. && alembic revision --autogenerate -m "add_api_key_to_user"
+mv alembic.ini backend/
+cd backend && alembic revision --autogenerate -m "add_api_key_to_user"
+pip install pydantic-settings
+alembic revision --autogenerate -m "add_api_key_to_user"
+cd backend && DATABASE_URL="postgresql://postgres:ilrFlJrXsUGlHbBPQawIsLJrCmXRGIaX@ballast.proxy.rlwy.net:44749/railway" alembic upgrade head
+cd /Users/priyanshigupta/EchosysAI/MVP/others/mvpbeta/backend && DATABASE_URL="postgresql://postgres:ilrFlJrXsUGlHbBPQawIsLJrCmXRGIaX@ballast.proxy.rlwy.net:44749/railway" alembic upgrade head
+cd backend
+python clear_db.py
+python3 clear_db.py
+source .venv/bin/activate
+python3 clear_db.py
+pip install sqlalchemy psycopg2-binary
+python3 clear_db.py
+pip install -r requirements.txt
+pip install psycopg2
+python3 clear_db.py
+pip list | grep pydantic
+pip install -r requirements.txt
+cd ..
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cd backend/
+pip install -r requirements.txt
+python --version
+deactivate
+cd ..
+source .venv/bin/activate
+pip install -r requirements.txt
+cd backend
+cd ..
+pip install -r backend/requirements.txt
+python3 backend/clear_db.py
+cd b
+cd backend/
+python print_data.py
+python3 print_data.py
+cd ..
+source .venv/bin/activate
+python print_data.py
+cd backend
+python print_data.py
+python print_data.py
+python print_data.py
+curl -X POST http://localhost:8000/auth/register -H "Content-Type: application/json" -d '{"email": "testuser2@example.com", "password": "testpass123", "full_name": "Test User 2"}'
+python print_data.py
+clear
+python print_data.py
+python print_data.py
+python print_data.py
+curl http://localhost:8000/api/rca/status/4
+cd ..
+curl http://localhost:8000/api/rca/status/4
+curl http://localhost:8000/api/rca/status/4
+curl http://localhost:8000/api/rca/status/4
+curl http://localhost:8000/api/rca/status/4
+cd backend && python -c "from api.models.database import Base, engine; Base.metadata.create_all(bind=engine)"
+curl http://localhost:8000/api/rca/status/4
+cd ..
+curl http://localhost:8000/api/rca/status/4
+curl http://localhost:8000/api/rca/status/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+clear
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+curl -X POST http://localhost:8000/api/rca/analyze/4
+pip install deepeval
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+pip install aiobotocore boto3 deepeval
+python -m unittest backend/tests/test_deepvals_metrics.py
+clear
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+clear
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+clear
+python -m unittest backend/tests/test_deepvals_metrics.py
+python -m unittest backend/tests/test_deepvals_metrics.py
+(.venv) priyanshigupta@dhcp-vl2051-849 mvpbeta % python -m unittest backend/tests/test_deepvals_metrics.py
+Environment variables loaded
+Raw DATABASE_URL from env: postgresql://postgres:postgres@localhost:5432/echosys
+Settings DATABASE_URL: postgresql://postgres:postgres@localhost:5432/echosys
+Error evaluating interaction: 'retrieval_context' cannot be None for the 'Faithfulness' metric
+Error evaluating interaction: 'retrieval_context' cannot be None for the 'Faithfulness' metric
+/Users/priyanshigupta/EchosysAI/MVP/others/mvpbeta/.venv/lib/python3.11/site-packages/rich/_emoji_replace.py:23: ResourceWarning:
+unclosed <socket.socket fd=14, family=2, type=1, proto=6, laddr=('10.56.4.81', 63723), raddr=('162.159.140.245', 443)>
+  def do_replace(match: Match[str]) -> str:
+python -m backend.testing.test_evaluation_agent
+ls -l .venv/bin/python* && echo "---" && ls -l backend/.venv/bin/python*
+rm -rf backend/.venv
+curl -X POST http://localhost:8000/auth/register \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "email": "testuser@example.com",\
+    "password": "testpassword123",\
+    "full_name": "Test User"\
+  }'
+   alembic upgrade head
+curl -X POST http://localhost:8000/auth/register \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "email": "testuser@example.com",\
+    "password": "testpassword123",\
+    "full_name": "Test User"\
+  }'
+source ../.venv/bin/activate
+source .venv/bin/activate
+alembic upgrade head
+alembic upgrade head
+cd backend
+alembic upgrade head
+cd ..
+curl -X POST http://localhost:8000/auth/register \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "email": "testuser@example.com",\
+    "password": "testpassword123",\
+    "full_name": "Test User"\
+  }'
+cd frontend
+npm run dev
+source .venv/bin/activate
+python --version
+   pip install --upgrade pip\
+   pip install -r backend/requirements.txt
+createuser -s postgres
+psql postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+createdb -U postgres echosys
+cd backend && uvicorn main:app --reload
+pip install psycopg2-binary
+   alembic revision --autogenerate -m "add_api_key_to_user"
+   alembic upgrade head
+cd backend && uvicorn main:app --reload
+cd ..
+cd backend && uvicorn main:app --reload
+cd ..
+cd ..
+cd backend && uvicorn main:app --reload
+cd backend && uvicorn main:app --reload
+cd ..
+cd ..
+cd backend && uvicorn main:app --reload
+cd backend && uvicorn main:app --reload
+cd ..
+cd ..
+cd backend && uvicorn main:app --reload
+pip install -r requirements.txt
+cd ..
+cd backend && uvicorn main:app --reload

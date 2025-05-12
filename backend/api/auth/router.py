@@ -16,13 +16,16 @@ from starlette.config import Config
 import os
 
 from ..database.database import get_db
-from ..models.database import User, AuditLog
+from ..models.database import User, AuditLog, generate_api_key
 from ..models.user import UserCreate, UserLogin, UserResponse, Token, TokenData
 from config.settings import settings
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+# Debug log to check imports
+logger.debug(f"generate_api_key function: {generate_api_key}")
 
 # Initialize rate limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -224,22 +227,24 @@ async def register(
         # Create new user
         logger.info("Creating new user...")
         hashed_password = get_password_hash(user_data.password)
+        api_key = generate_api_key()  # Generate API key
         db_user = User(
             email=user_data.email,
             full_name=user_data.full_name,
             hashed_password=hashed_password,
-            is_active=True
+            is_active=True,
+            api_key=api_key  # Store API key
         )
         
         db.add(db_user)
-        db.flush()
+        db.flush()  # This will generate the user ID
         
-        # Create audit log
+        # Create audit log with user ID
         audit_log = AuditLog(
-            user_id=db_user.id,
+            user_id=db_user.id,  # Use the generated user ID
             action_type="register",
             resource_type="user",
-            resource_id=db_user.id,
+            resource_id=db_user.id,  # Use the generated user ID
             meta_data={
                 "ip_address": request.client.host if request.client else None,
                 "details": f"User registered: {db_user.email}"
@@ -399,11 +404,13 @@ async def github_callback(request: Request, db: Session = Depends(get_db)):
         user = db.query(User).filter(User.email == email).first()
         if not user:
             logger.info(f"Creating new user for email: {email}")
+            api_key = generate_api_key()  # Generate API key
             user = User(
                 email=email,
                 full_name=user_data.get('name') or user_data.get('login'),
                 hashed_password='',  # Not used for OAuth
-                is_active=True
+                is_active=True,
+                api_key=api_key  # Store API key
             )
             db.add(user)
             db.commit()
@@ -418,25 +425,30 @@ async def github_callback(request: Request, db: Session = Depends(get_db)):
             data={"sub": user.email},
             expires_delta=access_token_expires
         )
-        logger.info("Generated JWT token")
         
-        # Get frontend URL from environment
-        frontend_url = os.getenv("FRONTEND_URL")
-        if not frontend_url:
-            logger.error("FRONTEND_URL not configured")
-            return JSONResponse(
-                {"error": "Server configuration error. Please contact support."},
-                status_code=500
-            )
-            
+        # Create audit log
+        audit_log = AuditLog(
+            user_id=user.id,
+            action_type="github_login",
+            resource_type="user",
+            resource_id=user.id,
+            meta_data={
+                "ip_address": request.client.host if request.client else None,
+                "details": f"User logged in via GitHub: {user.email}"
+            }
+        )
+        db.add(audit_log)
+        db.commit()
+        
         # Redirect to frontend with token
-        redirect_url = f"{frontend_url}/auth/callback?token={access_token}"
-        logger.info(f"Redirecting to: {frontend_url}/auth/callback")
-        return RedirectResponse(url=redirect_url)
+        frontend_url = settings.FRONTEND_URL
+        return RedirectResponse(
+            url=f"{frontend_url}/auth/callback?token={access_token}"
+        )
         
     except Exception as e:
-        logger.error(f"GitHub OAuth error: {str(e)}", exc_info=True)
+        logger.error(f"Error in GitHub callback: {str(e)}")
         return JSONResponse(
-            {"error": "Authentication failed. Please try again."},
-            status_code=400
+            {"error": "Authentication failed"},
+            status_code=500
         ) 

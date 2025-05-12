@@ -1,0 +1,682 @@
+[
+    {
+        "user_input": "Process my payment for the new laptop.",
+        "system_output": "Payment processing failed.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested payment processing.",
+                "details": {
+                    "user_id": "u128"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "ERROR",
+                "service": "payment_gateway",
+                "message": "Payment gateway is down.",
+                "details": {
+                    "error_code": 500
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are a payment assistant. Validate payment details.",
+                "user_prompt": "Process my payment for the new laptop.",
+                "model_output": "Payment details valid.",
+                "confidence": 0.85,
+                "call_id": "llm7",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "validate_payment"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-006",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "ERROR",
+                "attributes": {
+                    "error_code": 500
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 756,
+            "throughput": 71,
+            "error_rate": 0.01,
+            "resource_usage": {
+                "cpu": 0.15,
+                "memory": 289
+            }
+        }
+    },
+    {
+        "user_input": "When will my order be delivered?",
+        "system_output": "Error: Shipping information unavailable.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested shipping info.",
+                "details": {
+                    "user_id": "u132"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "ERROR",
+                "service": "shipping_service",
+                "message": "Shipping service error.",
+                "details": {
+                    "order_id": "o791"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are a shipping assistant. Retrieve shipping information.",
+                "user_prompt": "When will my order be delivered?",
+                "model_output": "Shipping information unavailable.",
+                "confidence": 0.5,
+                "call_id": "llm11",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "get_shipping_info"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-010",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "ERROR",
+                "attributes": {
+                    "order_id": "o791"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 961,
+            "throughput": 37,
+            "error_rate": 0.09,
+            "resource_usage": {
+                "cpu": 0.9,
+                "memory": 162
+            }
+        }
+    },
+    {
+        "user_input": "Schedule a meeting with John tomorrow at 2 PM",
+        "system_output": "Meeting scheduled successfully",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User submitted scheduling request.",
+                "details": {
+                    "user_id": "u123"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "log_level": "INFO",
+                "service": "api-gateway",
+                "message": "Forwarded scheduling request to agent service.",
+                "details": {
+                    "request_id": "r456"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "ERROR",
+                "service": "calendar_service",
+                "message": "Failed to create calendar event: Timezone conversion failed.",
+                "details": {
+                    "input_timezone": "UTC",
+                    "target_timezone": "America/New_York"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are a calendar assistant. Parse the meeting request and extract date, time, and attendees.",
+                "user_prompt": "Schedule a meeting with John tomorrow at 2 PM",
+                "model_output": "Meeting scheduled for 2024-03-20 at 14:00 UTC",
+                "confidence": 0.95,
+                "call_id": "llm1",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "parse_request"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:37",
+                "system_message": "You are a timezone conversion assistant. Convert the given time to the target timezone.",
+                "user_prompt": "Convert 14:00 UTC to America/New_York timezone",
+                "model_output": "10:00 AM EDT",
+                "confidence": 0.98,
+                "call_id": "llm2",
+                "parent_call_id": "llm1",
+                "metadata": {
+                    "step": "convert_timezone"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-001",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:36",
+                "duration_ms": 1000,
+                "status": "OK",
+                "attributes": {
+                    "user_id": "u123"
+                }
+            },
+            {
+                "trace_id": "trace-001",
+                "parent_id": "frontend",
+                "service": "api-gateway",
+                "operation": "forward_request",
+                "start_time": "2025-05-07T03:26:36",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 2000,
+                "status": "OK",
+                "attributes": {
+                    "request_id": "r456"
+                }
+            },
+            {
+                "trace_id": "trace-001",
+                "parent_id": "api-gateway",
+                "service": "calendar_service",
+                "operation": "create_event",
+                "start_time": "2025-05-07T03:26:38",
+                "end_time": "2025-05-07T03:26:40",
+                "duration_ms": 2000,
+                "status": "ERROR",
+                "attributes": {
+                    "error": "Timezone conversion failed"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 209,
+            "throughput": 29,
+            "error_rate": 0.05,
+            "resource_usage": {
+                "cpu": 0.88,
+                "memory": 369
+            }
+        }
+    },
+    {
+        "user_input": "Confirm my order for the new laptop.",
+        "system_output": "Order confirmed.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested order confirmation.",
+                "details": {
+                    "user_id": "u131"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "WARNING",
+                "service": "order_processing_system",
+                "message": "Order processing system experienced high latency.",
+                "details": {
+                    "order_id": "o790"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are an order confirmation assistant. Confirm the order.",
+                "user_prompt": "Confirm my order for the new laptop.",
+                "model_output": "Order confirmed.",
+                "confidence": 0.9,
+                "call_id": "llm10",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "confirm_order"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-009",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "WARNING",
+                "attributes": {
+                    "order_id": "o790"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 1217,
+            "throughput": 56,
+            "error_rate": 0.04,
+            "resource_usage": {
+                "cpu": 0.57,
+                "memory": 156
+            }
+        }
+    },
+    {
+        "user_input": "Is the new smartphone in stock?",
+        "system_output": "Yes, it's available.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested product availability.",
+                "details": {
+                    "user_id": "u130"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "WARNING",
+                "service": "inventory_service",
+                "message": "Inventory service returned outdated info.",
+                "details": {
+                    "product_id": "p321"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are an inventory assistant. Check product availability.",
+                "user_prompt": "Is the new smartphone in stock?",
+                "model_output": "Yes, it's available.",
+                "confidence": 0.7,
+                "call_id": "llm9",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "check_inventory"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-008",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "WARNING",
+                "attributes": {
+                    "product_id": "p321"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 216,
+            "throughput": 90,
+            "error_rate": 0.06,
+            "resource_usage": {
+                "cpu": 0.12,
+                "memory": 255
+            }
+        }
+    },
+    {
+        "user_input": "What's the status of my order?",
+        "system_output": "Your order is processing.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested order status.",
+                "details": {
+                    "user_id": "u129"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "WARNING",
+                "service": "order_tracking_service",
+                "message": "Order tracking service returned incomplete info.",
+                "details": {
+                    "order_id": "o789"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are an order tracking assistant. Retrieve order status.",
+                "user_prompt": "What's the status of my order?",
+                "model_output": "Order is processing.",
+                "confidence": 0.8,
+                "call_id": "llm8",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "track_order"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-007",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "WARNING",
+                "attributes": {
+                    "order_id": "o789"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 217,
+            "throughput": 72,
+            "error_rate": 0.09,
+            "resource_usage": {
+                "cpu": 0.24,
+                "memory": 417
+            }
+        }
+    },
+    {
+        "user_input": "Create a new user account for Alice",
+        "system_output": "User account created successfully",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested account creation.",
+                "details": {
+                    "user_id": "u125"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "ERROR",
+                "service": "user_service",
+                "message": "Missing required parameters: email, phone.",
+                "details": {
+                    "provided_fields": [
+                        "name",
+                        "department"
+                    ]
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are a user account creation assistant. Extract required fields from the request.",
+                "user_prompt": "Create a new user account for Alice",
+                "model_output": "Extracted fields: name=Alice",
+                "confidence": 0.9,
+                "call_id": "llm4",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "extract_fields"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-003",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "ERROR",
+                "attributes": {
+                    "missing_fields": [
+                        "email",
+                        "phone"
+                    ]
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 285,
+            "throughput": 47,
+            "error_rate": 0.08,
+            "resource_usage": {
+                "cpu": 0.33,
+                "memory": 130
+            }
+        }
+    },
+    {
+        "user_input": "Create a new user account for Alice",
+        "system_output": "User account created successfully",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested account creation.",
+                "details": {
+                    "user_id": "u125"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "ERROR",
+                "service": "user_service",
+                "message": "Missing required parameters: email, phone.",
+                "details": {
+                    "provided_fields": [
+                        "name",
+                        "department"
+                    ]
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are a user account creation assistant. Extract required fields from the request.",
+                "user_prompt": "Create a new user account for Alice",
+                "model_output": "Extracted fields: name=Alice",
+                "confidence": 0.9,
+                "call_id": "llm4",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "extract_fields"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-003",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "ERROR",
+                "attributes": {
+                    "missing_fields": [
+                        "email",
+                        "phone"
+                    ]
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 943,
+            "throughput": 13,
+            "error_rate": 0.09,
+            "resource_usage": {
+                "cpu": 0.12,
+                "memory": 265
+            }
+        }
+    },
+    {
+        "user_input": "What's the status of my order?",
+        "system_output": "Your order is processing.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested order status.",
+                "details": {
+                    "user_id": "u129"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "WARNING",
+                "service": "order_tracking_service",
+                "message": "Order tracking service returned incomplete info.",
+                "details": {
+                    "order_id": "o789"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are an order tracking assistant. Retrieve order status.",
+                "user_prompt": "What's the status of my order?",
+                "model_output": "Order is processing.",
+                "confidence": 0.8,
+                "call_id": "llm8",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "track_order"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-007",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "WARNING",
+                "attributes": {
+                    "order_id": "o789"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 673,
+            "throughput": 85,
+            "error_rate": 0.02,
+            "resource_usage": {
+                "cpu": 0.65,
+                "memory": 101
+            }
+        }
+    },
+    {
+        "user_input": "Is the new smartphone in stock?",
+        "system_output": "Yes, it's available.",
+        "prod_logs": [
+            {
+                "timestamp": "2025-05-07T03:26:35",
+                "log_level": "INFO",
+                "service": "frontend",
+                "message": "User requested product availability.",
+                "details": {
+                    "user_id": "u130"
+                }
+            },
+            {
+                "timestamp": "2025-05-07T03:26:38",
+                "log_level": "WARNING",
+                "service": "inventory_service",
+                "message": "Inventory service returned outdated info.",
+                "details": {
+                    "product_id": "p321"
+                }
+            }
+        ],
+        "llm_calls": [
+            {
+                "timestamp": "2025-05-07T03:26:36",
+                "system_message": "You are an inventory assistant. Check product availability.",
+                "user_prompt": "Is the new smartphone in stock?",
+                "model_output": "Yes, it's available.",
+                "confidence": 0.7,
+                "call_id": "llm9",
+                "parent_call_id": null,
+                "metadata": {
+                    "step": "check_inventory"
+                }
+            }
+        ],
+        "traces": [
+            {
+                "trace_id": "trace-008",
+                "parent_id": null,
+                "service": "frontend",
+                "operation": "user_request",
+                "start_time": "2025-05-07T03:26:35",
+                "end_time": "2025-05-07T03:26:38",
+                "duration_ms": 3000,
+                "status": "WARNING",
+                "attributes": {
+                    "product_id": "p321"
+                }
+            }
+        ],
+        "metrics": {
+            "latency_ms": 278,
+            "throughput": 13,
+            "error_rate": 0.02,
+            "resource_usage": {
+                "cpu": 0.86,
+                "memory": 375
+            }
+        }
+    }
+]

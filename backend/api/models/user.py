@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from datetime import datetime
+from pydantic import ConfigDict
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -12,12 +14,16 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
+    """Response model for user data."""
     id: int
+    email: str
+    full_name: str
     is_active: bool
+    created_at: datetime
+    api_key: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
     access_token: str

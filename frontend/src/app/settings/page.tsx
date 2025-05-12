@@ -1,116 +1,76 @@
 "use client";
-export const dynamic = "force-dynamic";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Settings } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Copy, LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const [apiKey, setApiKey] = useState<string>("");
+
+  useEffect(() => {
+    const storedApiKey = localStorage.getItem("apiKey");
+    if (!storedApiKey) {
+      router.replace("/");
+      return;
+    }
+    setApiKey(storedApiKey);
+  }, [router]);
+
+  const handleCopyApiKey = () => {
+    navigator.clipboard.writeText(apiKey);
+    toast.success("API key copied to clipboard");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("apiKey");
+    router.replace("/");
+  };
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Settings</h1>
-      </div>
-
-      <div className="grid gap-6">
-        {/* API Configuration */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              API Configuration
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="api-url">API URL</Label>
-              <Input
-                id="api-url"
-                placeholder="http://localhost:8000"
-                defaultValue={process.env.NEXT_PUBLIC_API_URL}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="api-key">API Key</Label>
-              <Input
-                id="api-key"
-                type="password"
-                placeholder="Enter your API key"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Notification Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              Notification Settings
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>Email Notifications</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive email notifications for incidents
-                </p>
+    <main className="min-h-screen bg-gradient-to-br from-[#6a8dff] via-[#a084ee] to-[#e0c3fc] p-8">
+      <div className="max-w-4xl mx-auto">
+        <Card className="p-8 bg-white/90 shadow-lg">
+          <h1 className="text-3xl font-bold mb-8">Settings</h1>
+          
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold mb-4">API Key</h2>
+              <div className="flex items-center gap-4">
+                <code className="bg-gray-100 p-3 rounded flex-1 font-mono">
+                  {apiKey}
+                </code>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleCopyApiKey}
+                  title="Copy API Key"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
               </div>
-              <Switch />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>Slack Integration</Label>
-                <p className="text-sm text-muted-foreground">
-                  Send incident notifications to Slack
-                </p>
-              </div>
-              <Switch />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* RCA Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              RCA Settings
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="rca-threshold">RCA Threshold (ms)</Label>
-              <Input
-                id="rca-threshold"
-                type="number"
-                placeholder="1000"
-                defaultValue="1000"
-              />
-              <p className="text-sm text-muted-foreground">
-                Trigger RCA when latency exceeds this threshold
+              <p className="text-sm text-gray-500 mt-2">
+                Use this API key to authenticate your requests to the Echosys API.
               </p>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>Auto RCA</Label>
-                <p className="text-sm text-muted-foreground">
-                  Automatically run RCA on incidents
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-          </CardContent>
-        </Card>
 
-        <div className="flex justify-end">
-          <Button>Save Changes</Button>
-        </div>
+            <div className="pt-4 border-t">
+              <Button
+                variant="destructive"
+                onClick={handleLogout}
+                className="flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </Card>
       </div>
-    </div>
+    </main>
   );
 } 

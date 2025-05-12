@@ -20,7 +20,7 @@ export default function StartPage() {
   const router = useRouter();
 
   const handleSignup = () => {
-    router.push("/create-team");
+    router.push("/signup-email");
   };
 
   return (

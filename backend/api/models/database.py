@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 # Create SQLite engine
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Needed for SQLite
     echo=True  # Enable SQL query logging
 )
 

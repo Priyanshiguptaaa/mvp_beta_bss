@@ -1,5 +1,10 @@
 import os
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
+from pathlib import Path
+
+
+# print(f"Loaded db url: {os.getenv('DATABASE_URL')}")
 
 class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-key")
@@ -9,7 +14,9 @@ class Settings(BaseSettings):
     GITHUB_CLIENT_SECRET: str = os.getenv("GITHUB_CLIENT_SECRET", "")
     GITHUB_CALLBACK_URL: str = os.getenv("GITHUB_CALLBACK_URL", f"https://{os.getenv('RAILWAY_PUBLIC_DOMAIN', 'localhost:8000')}/auth/github/callback")
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./echosys.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:ilrFlJrXsUGlHbBPQawIsLJrCmXRGIaX@ballast.proxy.rlwy.net:44749/railway")
+
+    print(f"Loaded db url: {os.getenv('DATABASE_URL')}")
     # Add other settings as needed
 
 settings = Settings() 

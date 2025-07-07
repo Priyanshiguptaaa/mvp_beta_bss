@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import Link from 'next/link';
 
 export default function IncidentsPage() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
@@ -93,8 +94,14 @@ export default function IncidentsPage() {
                   <Badge variant={incident.status === 'resolved' ? 'success' : 'destructive'}>
                     {incident.status}
                   </Badge>
-                  <Button variant="outline" size="sm">
-                    View Details
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Link href={`/rca-console/${incident.id}`}>
+                      View Details
+                    </Link>
                   </Button>
                 </div>
               </div>

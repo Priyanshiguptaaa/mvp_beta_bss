@@ -230,10 +230,10 @@ async def register(
         api_key = generate_api_key()  # Generate API key
         db_user = User(
             email=user_data.email,
-            full_name=user_data.full_name,
+            name=user_data.full_name,
             hashed_password=hashed_password,
             is_active=True,
-            api_key=api_key  # Store API key
+            api_key=api_key
         )
         
         db.add(db_user)

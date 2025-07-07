@@ -98,7 +98,7 @@ async def db_session_middleware(request: Request, call_next):
 
 # Include routers
 app.include_router(auth_router)
-app.include_router(api_router)
+app.include_router(api_router)  # This will include all routes including sanity_scheduler
 
 
 class Model(BaseModel):

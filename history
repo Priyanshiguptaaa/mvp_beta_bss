@@ -691,3 +691,539 @@ cd backend && uvicorn main:app --reload
 pip install -r requirements.txt
 cd ..
 cd backend && uvicorn main:app --reload
+rm -rf frontend/src/app/sanity-scheduler
+cd frontend && npm install react-day-picker date-fns
+cd frontend && npm uninstall date-fns react-day-picker && npm install date-fns@2.30.0 react-day-picker@8.10.0
+cd ..
+cd frontend && npm uninstall date-fns react-day-picker && npm install date-fns@2.30.0 react-day-picker@8.10.0
+npm install @radix-ui/react-label @radix-ui/react-slot class-variance-authority
+npm install @radix-ui/react-popover
+npm install @radix-ui/react-dialog lucide-react
+ps aux | grep uvicorn | cat
+curl http://localhost:8000/docs | cat
+curl http://localhost:8000/docs | cat
+cd backend && uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+cd backend && alembic revision --autogenerate -m "add_test_results_and_incidents"
+alembic upgrade head
+python -m unittest backend/tests/test_execution_agent_test.py
+# Test single test\
+curl -X POST http://localhost:8000/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'\
+\
+# Test batch tests\
+curl -X POST http://localhost:8000/scheduler/run-batch-tests \\
+  -H "Content-Type: application/json" \\
+  -d '[\
+    {\
+      "test_name": "Test 1",\
+      "instruction": "Test instruction 1",\
+      "agent": "Agent 1",\
+      "environment": "Dev"\
+    },\
+    {\
+      "test_name": "Test 2",\
+      "instruction": "Test instruction 2",\
+      "agent": "Agent 2",\
+      "environment": "Prod"\
+    }\
+  ]'
+# Test single test\
+curl -X POST http://localhost:8000/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'\
+\
+# Test batch tests\
+curl -X POST http://localhost:8000/scheduler/run-batch-tests \\
+  -H "Content-Type: application/json" \\
+  -d '[\
+    {\
+      "test_name": "Test 1",\
+      "instruction": "Test instruction 1",\
+      "agent": "Agent 1",\
+      "environment": "Dev"\
+    },\
+    {\
+      "test_name": "Test 2",\
+      "instruction": "Test instruction 2",\
+      "agent": "Agent 2",\
+      "environment": "Prod"\
+    }\
+  ]'
+cd backend
+python scripts/test_sanity_scheduler.py
+python scripts/test_sanity_scheduler.py
+clear
+curl http://localhost:8000/health
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+clear
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Calculator Addition",\
+    "instruction": "Add 2 + 2",\
+    "agent": "Calculator Agent",\
+    "environment": "Development",\
+    "expected_behavior": "Should return 4"\
+  }'
+alembic -c backend/alembic.ini upgrade head
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+alembic -c backend/alembic.ini current
+cd backend
+alembic -c backend/alembic.ini current
+alembic current
+alembic -c backend/alembic.ini current
+ls backend/alembic/versions/
+psql <your_database_url> -c "\d incidents"
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+clear
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+clear
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+   curl -X POST http://localhost:8000/api/scheduler/run-test \\
+     -H "Content-Type: application/json" \\
+     -d '{\
+       "test_name": "Test Sales Proposal Generation with Unrealistic Requirements",\
+       "instruction": "Generate a sales proposal for a startup with enterprise-level requirements and unrealistic budget constraints",\
+       "agent": "SalesAgent",\
+       "environment": "Development",\
+       "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+       "test_data": {\
+           "company": "StartupCorp",\
+           "tier": "enterprise",\
+           "requirements": [\
+               "100% uptime guarantee",\
+               "unlimited API calls",\
+               "zero latency",\
+               "5x faster than competitors",\
+               "predict market trends with 99.9% accuracy"\
+           ],\
+           "budget": 500,\
+           "industry": "Technology",\
+           "company_size": "5 employees",\
+           "timeline": "24 hours",\
+           "expected_roi": "1000%",\
+           "competitors": ["AWS", "Google Cloud", "Azure"],\
+           "custom_features": [\
+               "infinite scalability",\
+               "zero maintenance",\
+               "instant deployment",\
+               "100% accuracy guarantee"\
+           ]\
+       }\
+     }'
+   python backend/scripts/test_sanity_scheduler.py
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Sales Proposal Generation",\
+    "instruction": "Generate a sales proposal for an enterprise customer with AI analytics requirements",\
+    "agent": "SalesAgent",\
+    "environment": "Development",\
+    "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+    "test_data": {\
+        "company": "TechCorp",\
+        "tier": "enterprise",\
+        "requirements": ["AI analytics", "real-time tracking"],\
+        "budget": 50000,\
+        "industry": "Technology",\
+        "company_size": "1000+ employees"\
+    }\
+  }'
+curl -X POST http://localhost:8000/api/scheduler/run-test \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "test_name": "Test Sales Proposal Generation",\
+    "instruction": "Generate a sales proposal for an enterprise customer with AI analytics requirements",\
+    "agent": "SalesAgent",\
+    "environment": "Development",\
+    "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees",\
+    "test_data": {\
+        "company": "TechCorp",\
+        "tier": "enterprise",\
+        "requirements": ["AI analytics", "real-time tracking"],\
+        "budget": 50000,\
+        "industry": "Technology",\
+        "company_size": "1000+ employees"\
+    }\
+  }'
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "ALTER TABLE incidents ALTER COLUMN rca_report TYPE jsonb USING rca_report::jsonb;"
+curl http://localhost:8000/health | cat
+curl http://localhost:8000/api/scheduler/test-results | cat
+curl http://localhost:3000/api/scheduler/test-results | cat
+curl -X POST http://localhost:8000/api/scheduler/run-test -H "Content-Type: application/json" -d '{"test_name": "Test Calculator Addition", "instruction": "Add 2 + 2", "agent": "Calculator Agent", "environment": "Development"}' | cat
+curl -X POST http://localhost:8000/api/scheduler/run-test -H "Content-Type: application/json" -d '{"test_name": "Test Calculator Addition", "instruction": "Add 2 + 2", "agent": "Calculator Agent", "environment": "Development", "expected_behavior": "Should return 4"}' | cat
+curl http://localhost:8000/api/scheduler/test-results | cat
+cd backend && alembic revision --autogenerate -m "add details column to test_results"
+alembic upgrade head
+curl -X POST http://localhost:8000/api/scheduler/run-test -H "Content-Type: application/json" -d '{"test_name": "Test Sales Proposal Generation", "instruction": "Generate a sales proposal for an enterprise customer with AI analytics requirements", "agent": "SalesAgent", "environment": "Development", "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees", "test_data": {"company": "TechCorp", "tier": "enterprise", "requirements": ["AI analytics", "real-time tracking"], "budget": 50000, "industry": "Technology", "company_size": "1000+ employees"}}' | cat
+alembic revision --autogenerate -m "fix test_result incident relationship"
+alembic upgrade head
+curl -X POST http://localhost:8000/api/scheduler/run-test -H "Content-Type: application/json" -d '{"test_name": "Test Sales Proposal Generation", "instruction": "Generate a sales proposal for an enterprise customer with AI analytics requirements", "agent": "SalesAgent", "environment": "Development", "expected_behavior": "Should generate a proposal with realistic pricing, features, and timeline without hallucinations or unrealistic guarantees", "test_data": {"company": "TechCorp", "tier": "enterprise", "requirements": ["AI analytics", "real-time tracking"], "budget": 50000, "industry": "Technology", "company_size": "1000+ employees"}}' | cat
+alembic revision --autogenerate -m "remove incident_id from test_results and set one-to-one incident relationship"
+alembic upgrade head
+curl -X GET http://localhost:8000/api/scheduler/incidents/1 | jq
+curl -X GET http://localhost:8000/api/scheduler/incidents | jq
+curl -X GET http://localhost:8000/api/scheduler/test-results | jq
+alembic upgrade head
+curl -X GET http://localhost:8000/api/scheduler/test-results | jq
+alembic revision --autogenerate -m "fix test_results details column"
+alembic upgrade head
+curl -X GET http://localhost:8000/api/scheduler/test-results | jq
+psql $DATABASE_URL -c "ALTER TABLE test_results ADD COLUMN IF NOT EXISTS details TEXT;"
+curl -X GET http://localhost:8000/api/scheduler/test-results | jq
+curl -X GET http://localhost:8000/api/scheduler/incidents | jq
+alembic revision --autogenerate -m "change rca_report to jsonb"
+alembic upgrade head
+mkdir -p ../components/root-cause && mv ../components/scheduler/RCAConsole.tsx ../components/root-cause/RCAConsole.tsx && mv ../components/scheduler/ReplayViewer.tsx ../components/root-cause/ReplayViewer.tsx
+mv ../components/scheduler/RCAConsole.tsx ../components/root-cause/RCAConsole.tsx && mv ../components/scheduler/ReplayViewer.tsx ../components/root-cause/ReplayViewer.tsx
+ls ../components/scheduler
+ls ../../frontend/src/components/scheduler
+ls ../../src/components/scheduler
+ls ../src/components/scheduler
+ls ../../components/scheduler
+mkdir -p ../src/components/root-cause && mv ../src/components/scheduler/RCAConsole.tsx ../src/components/root-cause/RCAConsole.tsx && mv ../src/components/scheduler/ReplayViewer.tsx ../src/components/root-cause/ReplayViewer.tsx
+alembic revision --autogenerate -m "alter rca_report to jsonb"
+alembic upgrade head
+cd backend && python scripts/test_sanity_scheduler.py
+cd /Users/priyanshigupta/EchosysAI/MVP/others/mvpbeta && python backend/scripts/test_sanity_scheduler.py
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "UPDATE incidents SET rca_report = '{}' WHERE rca_report IS NULL OR rca_report = '' OR rca_report '^{.*}$';"
+alembic -c backend/alembic.ini downgrade -1
+cd backend && alembic downgrade -1
+alembic upgrade head
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "ALTER TABLE incidents ALTER COLUMN rca_report TYPE jsonb USING rca_report::jsonb;"
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+cd backend
+alembic upgrade head
+alembic downgrade -1
+alembic upgrade head
+(.venv) priyanshigupta@Priyanshis-MacBook-Pro mvpbeta % psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"\
+                                          Table "public.incidents"\
+     Column     |            Type             | Collation | Nullable |                Default                \
+----------------+-----------------------------+-----------+----------+---------------------------------------\
+ id             | integer                     |           | not null | nextval('incidents_id_seq'::regclass)\
+ title          | character varying           |           |          | \
+ description    | text                        |           |          | \
+ status         | character varying           |           |          | \
+ severity       | character varying           |           |          | \
+ agent          | character varying           |           |          | \
+ test_result_id | integer                     |           |          | \
+ rca_report     | text                        |           |          | \
+ created_at     | timestamp without time zone |           |          | \
+ updated_at     | timestamp without time zone |           |          | \
+ resolved_at    | timestamp without time zone |           |          | \
+Indexes:\
+    "incidents_pkey" PRIMARY KEY, btree (id)\
+    "ix_incidents_id" btree (id)\
+Foreign-key constraints:\
+    "incidents_test_result_id_fkey" FOREIGN KEY (test_result_id) REFERENCES test_results(id)\
+
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+   psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+ rca_report | jsonb
+alembic -c backend/alembic.ini upgrade head
+cd backend
+alembic upgrade head
+alembic upgrade head
+docker exec -it <your_postgres_container> psql -U <user> <db> -c "\d incidents"
+   python backend/scripts/test_sanity_scheduler.py
+curl http://localhost:8000/api/scheduler/incidents
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "SELECT id, title, agent, created_at FROM incidents ORDER BY id DESC LIMIT 10;"
+curl http://localhost:8000/api/incidents
+alembic upgrade head
+python backend/scripts/test_sanity_scheduler.py
+   python backend/scripts/test_sanity_scheduler.py
+python backend/scripts/test_sanity_scheduler.py
+     curl http://localhost:8000/api/scheduler/run-test
+   curl http://localhost:8000/api/scheduler/incidents
+psql postgresql://postgres:postgres@localhost:5432/echosys -c "\d incidents"
+alembic revision --autogenerate -m "Change rca_report to JSONB in main Incident model"\
+alembic upgrade head
+cd backend
+alembic revision --autogenerate -m "Change rca_report to JSONB in main Incident model"\
+alembic upgrade head
+clear
+alembic revision --autogenerate -m "Change description to JSONB in Incident"\
+alembic upgrade head
+clear
+alembic upgrade head
+python -u scripts/test_sanity_scheduler.py
+python backend/scripts/test_sanity_scheduler.py
+clear
+python backend/scripts/test_sanity_scheduler.py
+clear
+python backend/scripts/test_sanity_scheduler.py
+clear
+python backend/scripts/test_sanity_scheduler.py
+clear
+python backend/scripts/test_sanity_scheduler.py
+     python test_print.py
+ls
+cd backend
+python -u scripts/test_sanity_scheduler.py
+clear
+python -u scripts/test_sanity_scheduler.py
+clear
+python -u scripts/test_sanity_scheduler.py
+clear
+python -u scripts/test_sanity_scheduler.py
+clear
+python -u scripts/test_sanity_scheduler.py
+python -u scripts/test_sanity_scheduler.py
+python -u scripts/test_sanity_scheduler.py
+   alembic upgrade head
+clear
+  alembic history
+  alembic current
+\d users
+psql -h localhost -U postgres -d echosys

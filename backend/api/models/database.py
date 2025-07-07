@@ -9,6 +9,7 @@ import logging
 from enum import Enum as PyEnum
 import secrets
 import string
+from sqlalchemy.dialects.postgresql import JSONB
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +35,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
-    full_name = Column(String)
+    name = Column(String)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     api_key = Column(String, unique=True, index=True, default=generate_api_key)
 
     # Relationships
@@ -55,12 +57,9 @@ class Trace(Base):
     __tablename__ = "traces"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Make user_id optional
+    user_id = Column(Integer, ForeignKey("users.id"))
+    type = Column(String)  # interaction, log, metric
     content = Column(JSON)
-    file_name = Column(String)
-    file_size = Column(Integer)
-    analysis_results = Column(JSON)
-    status = Column(String, default="pending")  # pending, analyzing, completed, failed
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -186,14 +185,44 @@ class CustomMetric(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    name = Column(String, index=True)
-    description = Column(String)
-    config = Column(JSON)  # Stores metric configuration including gold standards
+    name = Column(String)
+    description = Column(Text)
+    config = Column(JSON)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship with User
     user = relationship("User", back_populates="custom_metrics")
+
+class TestResult(Base):
+    __tablename__ = "test_results"
+    id = Column(Integer, primary_key=True, index=True)
+    test_name = Column(String, nullable=False)
+    instruction = Column(Text, nullable=False)
+    agent = Column(String, nullable=False)
+    environment = Column(String, nullable=False)
+    expected_behavior = Column(Text, nullable=False)
+    status = Column(String, nullable=False)
+    result = Column(Text, nullable=False)
+    details = Column(Text, nullable=True, default=None)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    incident = relationship("Incident", back_populates="test_result", uselist=False)
+
+class Incident(Base):
+    __tablename__ = "incidents"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    description = Column(JSONB)
+    status = Column(String)  # open, resolved, closed
+    severity = Column(String)  # low, medium, high
+    agent = Column(String)
+    test_result_id = Column(Integer, ForeignKey("test_results.id"), unique=True)
+    rca_report = Column(JSONB)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    resolved_at = Column(DateTime, nullable=True)
+    test_result = relationship("TestResult", back_populates="incident")
 
 def get_db():
     """Dependency for getting DB session"""
